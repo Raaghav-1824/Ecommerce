@@ -1,4 +1,3 @@
-
 import AddOutlined from "@mui/icons-material/AddOutlined";
 import RemoveOutlined from "@mui/icons-material/RemoveOutlined";
 import styled from "styled-components";
@@ -13,7 +12,6 @@ import { addProduct } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
 import { mobile } from "../reponsive";
 import axios from "axios";
-
 
 const Container = styled.div``;
 
@@ -40,7 +38,6 @@ const Image = styled.img`
   }
   ${mobile({ height: "40vh" })}
 `;
-
 
 const InfoContainer = styled.div`
   flex: 1;
@@ -130,14 +127,15 @@ const Button = styled.button`
   transition: background-color 0.3s ease, color 0.3s ease;
   &:hover {
     background-color: white;
-    border-color: teal ;
-    color : teal;
+    border-color: teal;
+    color: teal;
   }
 `;
 
 const Product = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
+  console.log(id);
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
@@ -147,10 +145,16 @@ const Product = () => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/product/find/${id}`)
+        const res = await axios.get(
+          `http://localhost:3000/api/products/find/${id}`
+        );
+      
         setProduct(res.data);
-      } catch {}
+      } catch (error) {
+        console.log(error);
+      }
     };
+
     getProduct();
   }, [id]);
 
@@ -163,13 +167,12 @@ const Product = () => {
   };
 
   const handleClick = () => {
-    dispatch(
-      addProduct({ ...product, quantity, color, size })
-    );
+    dispatch(addProduct({ ...product, quantity, color, size }));
   };
+  
   return (
     <Container>
-     <Announcements />
+      <Announcements />
       <Navbar />
       <Wrapper>
         <ImgContainer>
@@ -206,7 +209,7 @@ const Product = () => {
         </InfoContainer>
       </Wrapper>
       <Newsletter />
-      <Footer/>
+      <Footer />
     </Container>
   );
 };

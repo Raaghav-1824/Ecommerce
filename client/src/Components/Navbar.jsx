@@ -5,6 +5,7 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import styled from "styled-components";
 import { mobile } from "../reponsive";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom"; 
 
 const Container = styled.div`
   height: 7vh;
@@ -47,7 +48,6 @@ const Input = styled.input`
   }
 `;
 
-
 const Center = styled.div`
   text-align: center;
   flex: 1;
@@ -88,9 +88,12 @@ function Navbar() {
         <Right>
           <MenuItem>Register</MenuItem>
           <MenuItem>Sign In </MenuItem>
+
           <MenuItem>
             <Badge badgeContent={quantity} color="primary">
-              <ShoppingCartOutlinedIcon />
+              <Link to={`/cart`}>
+                <ShoppingCartOutlinedIcon />
+              </Link>
             </Badge>
           </MenuItem>
         </Right>

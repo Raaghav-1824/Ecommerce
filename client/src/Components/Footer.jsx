@@ -70,8 +70,6 @@ const List = styled.ul`
   flex-wrap: wrap;
 `;
 
-
-
 const ListItem = styled.li`
   width: 50%;
   margin-bottom: 20px;

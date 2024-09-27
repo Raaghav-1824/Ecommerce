@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyTokenAndAuth, verifyTokenAndAdmin } from "./verifyToken.js";
-import  Product from "../models"
+import Product from "../models/Product.js"
 
 const productRouter = express.Router();
 
@@ -55,9 +55,9 @@ productRouter.delete("/:id", async (req, res) => {
   }
 });
 
-//GET USER
+//GET PRODUCT
 
-productRouter.get("/:id", async (req, res) => {
+productRouter.get("/find/:id", async (req, res) => {
   const productId = req.params.id;
   try {
     const product = await Product.findById(productId);
@@ -67,37 +67,29 @@ productRouter.get("/:id", async (req, res) => {
   }
 });
 
-//GET ALL USER
+//GET ALL PRODUCTS
 
-productRouter.get("/find", async (req, res) => {
+productRouter.get("/", async (req, res) => {
   const qNew = req.query.new;
-  const qCategories = req.query.category; 
-
-
-  if (!qNew &&!qCategories) {
-    return res.status(400).json({ message: "Please provide query parameters" });
-  }
+  const qCategory = req.query.category;
   try {
     let products;
+
     if (qNew) {
-      products = await Product.find()
-        .sort({
-          createdAt: -1,
-        })
-        .limit(1);
-    } else if (qCategories) {
+      products = await Product.find().sort({ createdAt: -1 }).limit(1);
+    } else if (qCategory) {
       products = await Product.find({
         categories: {
-          $in: [qCategories],
+          $in: [qCategory],
         },
       });
     } else {
       products = await Product.find();
     }
-    console.log(products)
+
     res.status(200).json(products);
-  } catch (error) {
-    res.status(500).json(error);
+  } catch (err) {
+    res.status(500).json(err);
   }
 });
 

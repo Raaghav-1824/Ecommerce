@@ -49,9 +49,6 @@ authRouter.post("/login", async (req, res) => {
     );
     const decryptedPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
-    // console.log("inputPassword:", req.body.password);
-    // console.log("userPasssword:", decryptedPassword);
-
     if (req.body.password !== decryptedPassword) {
       return res.status(401).json({
         status: "failed",

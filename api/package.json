@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "type": "module",
-  "proxy" : "http://localhost:3001",
+  "proxy": "http://localhost:3000",
   "scripts": {
     "test": "nodemon index.js"
   },
@@ -21,6 +21,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.4",
     "nodemon": "^3.1.4",
-    "stripe": "^16.2.0"
+    "stripe": "^16.12.0"
   }
 }
