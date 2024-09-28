@@ -14,7 +14,7 @@ authRouter.post("/register", async (req, res) => {
     email: req.body.email,
     password: CryptoJS.AES.encrypt(
       req.body.password,
-      process.env.SEC_KEY
+      process.env.AUTH_KEY
     ).toString(),
   });
 
