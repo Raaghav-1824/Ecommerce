@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyTokenAndAuth, verifyTokenAndAdmin } from "./verifyToken.js";
-import Product from "../models/Product.js"
+import Product from "../models/Product.js";
 
 const productRouter = express.Router();
 
@@ -57,13 +57,25 @@ productRouter.delete("/:id", async (req, res) => {
 
 //GET PRODUCT
 
+import mongoose from "mongoose"; // Ensure you import mongoose
+
 productRouter.get("/find/:id", async (req, res) => {
   const productId = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(productId)) {
+    return res.status(400).json({ message: "Invalid product ID" });
+  }
+
   try {
     const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
     res.status(200).json(product);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ message: "Internal server error", error });
   }
 });
 
