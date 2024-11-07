@@ -4,9 +4,10 @@ import ArrowLeftOutlinedIcon from "@mui/icons-material/ArrowLeftOutlined";
 import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
 import { sliderItems } from "../data";
 import { mobile } from "../reponsive";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
-  height: 100vh;
+  height: 90vh;
   width: 100%;
   display: flex;
   position: relative;
@@ -117,6 +118,7 @@ const Button = styled.button`
 
 const Slider = () => {
   const [sliderIndex, setSliderIndex] = useState(0);
+  const navigate = useNavigate();
 
   const handleClick = (direction) => {
     if (direction === "left") {
@@ -125,6 +127,11 @@ const Slider = () => {
       setSliderIndex(sliderIndex < sliderItems.length - 1 ? sliderIndex + 1 : 0);
     }
   };
+
+  const handleBtnClick = () =>{
+    // console.log("clicked")
+    navigate("/products");
+  }
 
   return (
     <Container>
@@ -140,7 +147,7 @@ const Slider = () => {
             <InfoContainer>
               <Title>{item.title}</Title>
               <Desc>{item.desc}</Desc>
-              <Button>SHOP NOW</Button>
+              <Button onClick={handleBtnClick}>SHOP NOW</Button>
             </InfoContainer>
           </Slide>
         ))}

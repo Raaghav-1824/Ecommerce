@@ -5,11 +5,15 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import styled from "styled-components";
 import { mobile } from "../reponsive";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
+import Profile from "./Profile";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 
 const Container = styled.div`
-  height: 7vh;
+  height: 8vh;
   ${mobile({ height: "50px" })}
+  
+  
 `;
 const Wrapper = styled.div`
   padding: 10px 20px;
@@ -18,12 +22,13 @@ const Wrapper = styled.div`
   ${mobile({ padding: "10px 0px" })}
 `;
 const Left = styled.div`
-  flex: 1;
+  flex: 2;
   display: flex;
   align-items: center;
+  justify-content: center;
 `;
 const Language = styled.span`
-  font-size: 14px;
+  font-size: 16px;
   cursor: pointer;
   ${mobile({ display: "none" })}
 `;
@@ -33,48 +38,84 @@ const SearchContainer = styled.div`
   padding: 5px;
   display: flex;
   align-items: center;
+  width: 50%;
 `;
 const Input = styled.input`
   border: none;
-  outline: none; /* Remove default focus outline */
-  flex: 1; /* Take up remaining space in the container */
-  font-size: 12px; /* Ensure text is readable */
-  background-color: transparent; /* Transparent background to match container */
-  border-radius: 4px; /* Match the border radius of the container */
+  outline: none;
+  flex: 1;
+  font-size: 16px;
+  background-color: transparent;
+  border-radius: 4px;
   transition: background-color 0.3s ease;
 
   &:focus {
-    background-color: #fff; /* Brighter background on focus */
+    background-color: #fff;
   }
 `;
 
 const Center = styled.div`
-  text-align: center;
+  text-align: left;
   flex: 1;
+  justify-content: left;
 `;
 const Logo = styled.h1`
   font-weight: bold;
   ${mobile({ fontSize: "24px" })}
 `;
 const Right = styled.div`
-  flex: 1;
+  flex: 0.4;
   display: flex;
-  justify-content: right;
-  ${mobile({ flex: "2", justifyContent: "center" })}
-`;
-const MenuItem = styled.div`
-  display: flex;
+  justify-content: space-around;
   align-items: center;
-  margin: 0px 10px;
-  font-size: 14px;
-  cursor: pointer;
-  ${mobile({ fontSize: "12px", marginLeft: "10px" })}
+  ${mobile({ flexDirection: "column", justifyContent: "center" })}
 `;
+// const MenuItem = styled.div`
+//   color: black;
+//   display: flex;
+//   align-items: center;
+//   margin: 0px 10px;
+//   font-size: 16px;
+//   cursor: pointer;
+//   text-decoration: none;
+
+//   ${mobile({ fontSize: "12px", marginLeft: "10px" })};
+// `;
+
+// const Button = styled.button`
+//   color: black;
+//   font-size: 16px;
+//   border: none;
+//   background-color: white;
+//   cursor: pointer;
+//   &:disabled {
+//     color: green;
+//     cursor: not-allowed;
+//   }
+// `;
+
+const Icon = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 45px; /* Set a fixed width for each icon container */
+  height: 45px; /* Set a fixed height for consistent spacing */
+  color: black;
+  font-size: 12px; /* Adjust font size for the label */
+  text-align: center; /* Center align the text */
+  cursor: pointer;
+`;
+
 function Navbar() {
-  const quantity = useSelector((state) => state.cart.quantity);
+  // const quantity = useSelector((state) => state.cart.quantity);
+
   return (
     <Container>
       <Wrapper>
+        <Center>
+        <Link style={{textDecoration:"none"}} to={`/`}><Logo>Mart.</Logo></Link>
+        </Center>
         <Left>
           <Language>ENG</Language>
           <SearchContainer>
@@ -82,20 +123,22 @@ function Navbar() {
             <SearchIcon style={{ color: "grey", fontSize: "16px" }} />
           </SearchContainer>
         </Left>
-        <Center>
-          <Logo>LAMA.</Logo>
-        </Center>
         <Right>
-          <MenuItem>Register</MenuItem>
-          <MenuItem>Sign In </MenuItem>
+          <Icon>
+            <Profile sx={{ fontSize: "30px", padding: "0px" }} />
+            <span>Profile</span>
+          </Icon>
+          <Icon>
+            <FavoriteBorderOutlinedIcon sx={{ fontSize: "24px" }} />
+            <span>Wishlist</span>
+          </Icon>
 
-          <MenuItem>
-            <Badge badgeContent={quantity} color="primary">
-              <Link to={`/cart`}>
-                <ShoppingCartOutlinedIcon />
-              </Link>
-            </Badge>
-          </MenuItem>
+          <Link to={`/cart`}>
+            <Icon >
+              <ShoppingCartOutlinedIcon  sx={{ fontSize: "24px" }} />
+              <span style={{textDecoration:"none"}} >Cart</span>
+            </Icon>
+          </Link>
         </Right>
       </Wrapper>
     </Container>

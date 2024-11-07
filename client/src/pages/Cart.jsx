@@ -189,8 +189,9 @@ const Cart = () => {
 
   return (
     <Container>
-      <Navbar />
       <Announcements />
+      <Navbar />
+      
       {/* <ResetStore /> */}
       <Wrapper>
         <Title>YOUR BAG</Title>
@@ -255,7 +256,7 @@ const Cart = () => {
               <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
             <StripeCheckout
-              name="Lama Shop"
+              name="MArt Shop"
               image="https://avatars.githubusercontent.com/u/1486366?v=4"
               billingAddress
               shippingAddress
