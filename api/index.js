@@ -8,6 +8,7 @@ import cartRouter from "./routes/cart.js";
 import orderRouter from "./routes/order.js";
 import paymentRouter from "./routes/payment.js";
 import cors from "cors";
+import wishlistRouter from "./routes/wishlistRoute.js";
 const app = express();
 app.use(express.json());
 dotenv.config();
@@ -31,6 +32,7 @@ app.use("/api/products", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.use("/api", paymentRouter);
+app.use("/api/wishlist" , wishlistRouter)
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
