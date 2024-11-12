@@ -40,4 +40,4 @@ This project integrates powerful technologies, efficient performance techniques,
 ## Installation
 1. Clone the repository.
    ```bash
-   git clone https://github.com/yourusername/ecommerce-mern.git
+   git clone https://github.com/Raaghav-1824/Ecommerce.git
