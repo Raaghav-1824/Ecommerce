@@ -4,9 +4,6 @@ import { Link } from "react-router-dom";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import { useDispatch } from "react-redux";
-import { addToWishlist } from "../redux/wishListRedux";
-import { addProduct } from "../redux/wishListRedux";
 
 const Info = styled.div`
   opacity: 0;
@@ -29,6 +26,7 @@ const Container = styled.div`
   margin: 2px;
   height: 300px;
   min-width: 280px;
+  /* max-width: 300px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -67,34 +65,21 @@ const Icon = styled.div`
   }
 `;
 
-const Product = ({ item }) => {
-  const dispatch = useDispatch();
-
-  const handleWishlistClick = () => {
-    dispatch(addProduct({item}));
-  };
-
+const WishListProduct = ({ item}) => {
   return (
     <Container>
       <Circle />
       <Image src={item.img} />
       <Info>
-        <Link to={`/cart`}>
-          <Icon>
-            <ShoppingCartOutlinedIcon />
-          </Icon>
-        </Link>
         <Icon>
           <Link to={`/product/${item._id}`}>
             <SearchOutlinedIcon />
+            
           </Link>
-        </Icon>
-        <Icon onClick={handleWishlistClick}>
-          <FavoriteBorderOutlinedIcon />
         </Icon>
       </Info>
     </Container>
   );
 };
 
-export default Product;
+export default WishListProduct;

@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { mobile } from "../reponsive";
 import axios from "axios";
 
+
 const Container = styled.div``;
 
 const Wrapper = styled.div`
@@ -136,7 +137,7 @@ const Button = styled.button`
 const Product = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
-  console.log(id);
+  // console.log(id);
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");

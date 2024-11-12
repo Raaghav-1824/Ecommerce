@@ -12,8 +12,6 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 const Container = styled.div`
   height: 8vh;
   ${mobile({ height: "50px" })}
-  
-  
 `;
 const Wrapper = styled.div`
   padding: 10px 20px;
@@ -114,7 +112,9 @@ function Navbar() {
     <Container>
       <Wrapper>
         <Center>
-        <Link style={{textDecoration:"none"}} to={`/`}><Logo>Mart.</Logo></Link>
+          <Link style={{ textDecoration: "none" }} to={`/`}>
+            <Logo>Mart.</Logo>
+          </Link>
         </Center>
         <Left>
           <Language>ENG</Language>
@@ -128,15 +128,17 @@ function Navbar() {
             <Profile sx={{ fontSize: "30px", padding: "0px" }} />
             <span>Profile</span>
           </Icon>
-          <Icon>
-            <FavoriteBorderOutlinedIcon sx={{ fontSize: "24px" }} />
-            <span>Wishlist</span>
-          </Icon>
+          <Link to = {'/wishlist'}> 
+            <Icon>
+              <FavoriteBorderOutlinedIcon sx={{ fontSize: "24px" }} />
+              <span>Wishlist</span>
+            </Icon>
+          </Link>
 
           <Link to={`/cart`}>
-            <Icon >
-              <ShoppingCartOutlinedIcon  sx={{ fontSize: "24px" }} />
-              <span style={{textDecoration:"none"}} >Cart</span>
+            <Icon>
+              <ShoppingCartOutlinedIcon sx={{ fontSize: "24px" }} />
+              <span style={{ textDecoration: "none" }}>Cart</span>
             </Icon>
           </Link>
         </Right>

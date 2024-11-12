@@ -13,8 +13,8 @@ const userSlice = createSlice({
     },
     loginSuccess: (state, action) => {
       state.isFetching = false;
-      state.currentUser = action.payload;
-    },
+      state.currentUser = action.payload; // Ensure action.payload contains the user data, including userId
+    },    
     loginFailure: (state) => {
       state.isFetching = false;
       state.error = true;

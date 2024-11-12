@@ -12,6 +12,7 @@ import StripeCheckout from "react-stripe-checkout";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { userRequest } from "../requestMethods";
+import Button from "@mui/material/Button";
 
 const KEY = process.env.PUBLIC_KEY;
 
@@ -55,18 +56,25 @@ const TopText = styled.span`
 
 const Bottom = styled.div`
   display: flex;
+  padding: 0px 20px ;
   justify-content: space-between;
   ${mobile({ flexDirection: "column" })}
 `;
 
 const Info = styled.div`
   flex: 3;
+  margin: 2%;
 `;
 
 const Product = styled.div`
+  height : 25vh;
   display: flex;
   justify-content: space-between;
   ${mobile({ flexDirection: "column" })}
+  padding:10px;
+  &:not(:last-child) {
+    border-bottom: 1px solid #ddd; // Adds a line separator below each product except the last
+  }
 `;
 
 const ProductDetail = styled.div`
@@ -76,6 +84,7 @@ const ProductDetail = styled.div`
 
 const Image = styled.img`
   width: 200px;
+  /* object-fit: cover; */
 `;
 
 const Details = styled.div`
@@ -135,7 +144,8 @@ const Summary = styled.div`
   border: 0.5px solid lightgray;
   border-radius: 10px;
   padding: 20px;
-  height: 50vh;
+  height: 40vh;
+  margin-top: 30px;
 `;
 
 const SummaryTitle = styled.h1`
@@ -154,17 +164,18 @@ const SummaryItemText = styled.span``;
 
 const SummaryItemPrice = styled.span``;
 
-const Button = styled.button`
-  width: 100%;
-  padding: 10px;
-  background-color: black;
-  color: white;
-  font-weight: 600;
-`;
+// const Button = styled.button`
+//   width: 100%;
+//   padding: 10px;
+//   background-color: black;
+//   color: white;
+//   font-weight: 600;
+// `;
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
   const [stripeToken, setStripeToken] = useState(null);
+  // const [wishlistItem , setwishListItem] =  useState();
   const history = useNavigate();
 
   const onToken = (token) => {
@@ -191,18 +202,17 @@ const Cart = () => {
     <Container>
       <Announcements />
       <Navbar />
-      
+
       {/* <ResetStore /> */}
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>
-          <TopButton>CONTINUE SHOPPING</TopButton>
+          <Button variant="contained">CONTINUE SHOPPING</Button>
           <TopTexts>
             <TopText>Shopping Bag(2)</TopText>
             <TopText>Your Wishlist (0)</TopText>
           </TopTexts>
           <ResetStore />
-          <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>
         <Bottom>
           <Info>
@@ -256,7 +266,7 @@ const Cart = () => {
               <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
             <StripeCheckout
-              name="MArt Shop"
+              name="Mart Shop"
               image="https://avatars.githubusercontent.com/u/1486366?v=4"
               billingAddress
               shippingAddress
@@ -265,7 +275,10 @@ const Cart = () => {
               token={onToken}
               stripeKey={KEY}
             >
-              <Button>CHECKOUT NOW</Button>
+              {" "}
+              <Button variant="contained" >
+                PROCEED TO PAYMENT{" "}
+              </Button>
             </StripeCheckout>
           </Summary>
         </Bottom>
