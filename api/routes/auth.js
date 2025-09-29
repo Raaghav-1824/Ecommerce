@@ -9,16 +9,22 @@ const authRouter = express.Router();
 
 //REGISTER
 authRouter.post("/register", async (req, res) => {
+ 
   const newUser = User({
-    username: req.body.username,
+    firstname : req.body.firstName,
+    lastname: req.body.lastName,
+    username: req.body.userName,
     email: req.body.email,
     password: CryptoJS.AES.encrypt(
       req.body.password,
       process.env.AUTH_KEY
     ).toString(),
+
   });
 
   try {
+    console.log(newUser);
+ 
     const savedUser = await newUser.save();
     res.status(200).json(savedUser);
   } catch (error) {
@@ -32,8 +38,9 @@ authRouter.post("/register", async (req, res) => {
   }
 });
 
-//LOGIN
 
+
+//LOGIN
 authRouter.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
