@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ArrowLeftOutlinedIcon from "@mui/icons-material/ArrowLeftOutlined";
 import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
@@ -7,19 +7,19 @@ import { mobile } from "../reponsive";
 import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
-  height: 90vh;
   width: 100%;
+  height: 90vh;
   display: flex;
   position: relative;
   overflow: hidden;
-  background-color: #${(props) => props.bg};
-  ${mobile({ height: "60vh" })}
+  background: #f8f9fa;
+  ${mobile({ height: "70vh" })}
 `;
 
 const Arrow = styled.div`
   height: 50px;
   width: 50px;
-  background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
+  background-color: rgba(255, 255, 255, 0.9);
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -28,23 +28,37 @@ const Arrow = styled.div`
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  opacity: 0.7;
+  opacity: 0;
   z-index: 2;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
-  
-  &:hover {
-    background-color: rgba(255, 255, 255, 1);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  ${Container}:hover & {
     opacity: 1;
   }
-  
-  left: ${(props) => props.direction === "left" && "10px"};
-  right: ${(props) => props.direction === "right" && "10px"};
+
+  &:hover {
+    background-color: #fff;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  left: ${(props) => props.direction === "left" && "20px"};
+  right: ${(props) => props.direction === "right" && "20px"};
+
+  ${mobile({
+    opacity: 1,
+    height: "40px",
+    width: "40px",
+    left: (props) => props.direction === "left" && "10px",
+    right: (props) => props.direction === "right" && "10px"
+  })}
 `;
 
 const Wrapper = styled.div`
   height: 100%;
   display: flex;
-  transition: transform 1.5s ease;
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translateX(${(props) => props.sliderIndex * -100}vw);
 `;
 
@@ -53,66 +67,163 @@ const Slide = styled.div`
   width: 100vw;
   display: flex;
   align-items: center;
-  justify-content: center; /* Center the content horizontally */
-  background-color: #${(props) => props.bg};
+  justify-content: center;
+  background-color: #${props => props.bg};
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    z-index: 1;
+  }
+
+  ${mobile({ 
+    flexDirection: "column", 
+    justifyContent: "flex-start",
+    background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 100%)"
+  })}
 `;
 
 const ImgContainer = styled.div`
-  height: 100%;
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center; /* Center the image vertically */
+  align-items: center;
+  position: relative;
+  z-index: 1;
 `;
 
 const Image = styled.img`
-  height: 80%;
+  height: 90%;
+  width: auto;
   max-width: 100%;
-  object-fit: cover; /* Ensure the image covers the container */
-  transition: transform 0.5s ease;
-  
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+
   ${Slide}:hover & {
-    transform: scale(1.05); /* Slight zoom effect on hover */
+    transform: scale(1.05);
   }
+
+  ${mobile({ 
+    height: "70%",
+    marginTop: "20px"
+  })}
 `;
 
 const InfoContainer = styled.div`
   flex: 1;
   padding: 50px;
-  color: black;
+  color: #333;
   text-align: left;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+  ${mobile({ 
+    textAlign: "center", 
+    padding: "20px", 
+    position: "absolute", 
+    bottom: "5%", 
+    width: "100%",
+    background: "rgba(255, 255, 255, 0.9)",
+    backdropFilter: "blur(5px)"
+  })}
 `;
 
 const Title = styled.h1`
-  font-size: 70px;
+  font-size: 60px;
   font-weight: 700;
   margin-bottom: 20px;
-  ${mobile({ fontSize: "40px" })}
+  color: #1a1a1a;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease forwards;
+  
+  ${mobile({ 
+    fontSize: "32px",
+    marginBottom: "10px"
+  })}
 `;
 
 const Desc = styled.p`
   margin: 20px 0;
   font-weight: 500;
-  font-size: 20px;
-  letter-spacing: 2px;
-  ${mobile({ fontSize: "16px" })}
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #555;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease 0.2s forwards;
+  
+  ${mobile({ 
+    fontSize: "16px",
+    margin: "10px 0",
+    display: "block"
+  })}
 `;
 
 const Button = styled.button`
-  font-size: 20px;
-  padding: 10px 20px;
-  border: none;
-  background-color: white;
-  color: black;
+  font-size: 18px;
+  padding: 12px 30px;
+  border: 2px solid #1a1a1a;
+  background-color: transparent;
+  color: #1a1a1a;
   cursor: pointer;
   font-weight: 600;
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
-  border-radius: 5px;
-  
+  transition: all 0.3s ease;
+  border-radius: 30px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease 0.4s forwards;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
   &:hover {
-    background-color: black;
+    background-color: #1a1a1a;
     color: white;
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  ${mobile({
+    fontSize: "16px",
+    padding: "10px 25px"
+  })}
+`;
+
+const DotsContainer = styled.div`
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+`;
+
+const Dot = styled.div`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: ${props => props.active ? '#1a1a1a' : 'rgba(255, 255, 255, 0.5)'};
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: ${props => props.active ? '#1a1a1a' : 'rgba(255, 255, 255, 0.8)'};
   }
 `;
 
@@ -128,10 +239,20 @@ const Slider = () => {
     }
   };
 
-  const handleBtnClick = () =>{
-    // console.log("clicked")
+  const handleBtnClick = () => {
     navigate("/products");
-  }
+  };
+
+  // Auto-slide functionality
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSliderIndex((prevIndex) => 
+        prevIndex < sliderItems.length - 1 ? prevIndex + 1 : 0
+      );
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <Container>
@@ -142,12 +263,12 @@ const Slider = () => {
         {sliderItems.map((item) => (
           <Slide bg={item.bg} key={item.id}>
             <ImgContainer>
-              <Image src={item.img} />
+              <Image src={item.img} alt={item.title} />
             </ImgContainer>
             <InfoContainer>
               <Title>{item.title}</Title>
               <Desc>{item.desc}</Desc>
-              <Button onClick={handleBtnClick}>SHOP NOW</Button>
+              <Button onClick={handleBtnClick}>Shop Now</Button>
             </InfoContainer>
           </Slide>
         ))}
@@ -155,6 +276,15 @@ const Slider = () => {
       <Arrow direction="right" onClick={() => handleClick("right")}>
         <ArrowRightOutlinedIcon />
       </Arrow>
+      <DotsContainer>
+        {sliderItems.map((_, index) => (
+          <Dot 
+            key={index} 
+            active={index === sliderIndex}
+            onClick={() => setSliderIndex(index)}
+          />
+        ))}
+      </DotsContainer>
     </Container>
   );
 };

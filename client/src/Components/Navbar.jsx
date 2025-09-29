@@ -1,147 +1,208 @@
-import React from "react";
+import React, { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import { Badge } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import styled from "styled-components";
 import { mobile } from "../reponsive";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Profile from "./Profile";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import TemporaryDrawer from "./Drawer";
+import { useMediaQuery } from "@mui/material";
 
 const Container = styled.div`
-  height: 8vh;
-  ${mobile({ height: "50px" })}
+  height: 70px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  ${mobile({ height: "60px" })}
 `;
+
 const Wrapper = styled.div`
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 10px 20px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  ${mobile({ padding: "10px 0px" })}
+  height: 100%;
+  ${mobile({ padding: "10px 15px" })}
 `;
+
 const Left = styled.div`
   flex: 2;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 20px;
 `;
+
 const Language = styled.span`
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
+  font-weight: 500;
+  color: #555;
+  transition: color 0.2s ease;
+  
+  &:hover {
+    color: #000;
+  }
+  
   ${mobile({ display: "none" })}
 `;
+
 const SearchContainer = styled.div`
-  border: 0.5px solid lightgrey;
-  margin-left: 25px;
-  padding: 5px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
-  width: 50%;
+  width: 100%;
+  max-width: 400px;
+  transition: all 0.2s ease;
+  background: #f8f9fa;
+
+  &:focus-within {
+    border-color: #2196f3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+    background: #fff;
+  }
 `;
+
 const Input = styled.input`
   border: none;
   outline: none;
-  flex: 1;
-  font-size: 16px;
-  background-color: transparent;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-
-  &:focus {
-    background-color: #fff;
+  width: 100%;
+  font-size: 14px;
+  background: transparent;
+  color: #333;
+  
+  &::placeholder {
+    color: #999;
   }
 `;
 
 const Center = styled.div`
-  text-align: left;
   flex: 1;
-  justify-content: left;
+  text-align: left;
 `;
+
 const Logo = styled.h1`
   font-weight: bold;
-  ${mobile({ fontSize: "24px" })}
+  font-size: 28px;
+  color: #1a1a1a;
+  margin: 0;
+  transition: transform 0.2s ease;
+  
+  &:hover {
+    transform: scale(1.02);
+  }
+  
+  ${mobile({ fontSize: "22px", paddingLeft: "0" })}
 `;
+
 const Right = styled.div`
-  flex: 0.4;
+  flex: 1;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   align-items: center;
-  ${mobile({ flexDirection: "column", justifyContent: "center" })}
+  gap: 24px;
+  
+  ${mobile({
+    display: "none"
+  })}
 `;
-// const MenuItem = styled.div`
-//   color: black;
-//   display: flex;
-//   align-items: center;
-//   margin: 0px 10px;
-//   font-size: 16px;
-//   cursor: pointer;
-//   text-decoration: none;
-
-//   ${mobile({ fontSize: "12px", marginLeft: "10px" })};
-// `;
-
-// const Button = styled.button`
-//   color: black;
-//   font-size: 16px;
-//   border: none;
-//   background-color: white;
-//   cursor: pointer;
-//   &:disabled {
-//     color: green;
-//     cursor: not-allowed;
-//   }
-// `;
 
 const Icon = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 45px; /* Set a fixed width for each icon container */
-  height: 45px; /* Set a fixed height for consistent spacing */
-  color: black;
-  font-size: 12px; /* Adjust font size for the label */
-  text-align: center; /* Center align the text */
-  cursor: pointer;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  color: #333;
+  
+  &:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+  }
+
+  span {
+    font-size: 12px;
+    font-weight: 500;
+  }
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  
+  &:hover {
+    text-decoration: none;
+  }
+`;
+
+const MobileMenuIcon = styled.div`
+  display: none;
+  ${mobile({
+    display: "block"
+  })}
 `;
 
 function Navbar() {
-  // const quantity = useSelector((state) => state.cart.quantity);
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const [searchFocus, setSearchFocus] = useState(false);
 
   return (
     <Container>
       <Wrapper>
         <Center>
-          <Link style={{ textDecoration: "none" }} to={`/`}>
+          <StyledLink to="/">
             <Logo>Mart.</Logo>
-          </Link>
+          </StyledLink>
         </Center>
+        
         <Left>
           <Language>ENG</Language>
-          <SearchContainer>
-            <Input placeholder="Search" />
-            <SearchIcon style={{ color: "grey", fontSize: "16px" }} />
+          <SearchContainer style={{ background: searchFocus ? "#fff" : "#f8f9fa" }}>
+            <Input 
+              placeholder="Search products..." 
+              onFocus={() => setSearchFocus(true)}
+              onBlur={() => setSearchFocus(false)}
+            />
+            <SearchIcon style={{ color: searchFocus ? "#2196f3" : "#757575", fontSize: "20px", cursor: "pointer" }} />
           </SearchContainer>
         </Left>
-        <Right>
-          <Icon>
-            <Profile sx={{ fontSize: "30px", padding: "0px" }} />
-            <span>Profile</span>
-          </Icon>
-          <Link to = {'/wishlist'}> 
-            <Icon>
-              <FavoriteBorderOutlinedIcon sx={{ fontSize: "24px" }} />
-              <span>Wishlist</span>
-            </Icon>
-          </Link>
 
-          <Link to={`/cart`}>
+        {isMobile ? (
+          <MobileMenuIcon>
+            <TemporaryDrawer />
+          </MobileMenuIcon>
+        ) : (
+          <Right>
             <Icon>
-              <ShoppingCartOutlinedIcon sx={{ fontSize: "24px" }} />
-              <span style={{ textDecoration: "none" }}>Cart</span>
+              <Profile sx={{ fontSize: "24px" }} />
+              <span>Profile</span>
             </Icon>
-          </Link>
-        </Right>
+            
+            <StyledLink to="/wishlist">
+              <Icon>
+                <FavoriteBorderOutlinedIcon sx={{ fontSize: "24px" }} />
+                <span>Wishlist</span>
+              </Icon>
+            </StyledLink>
+
+            <StyledLink to="/cart">
+              <Icon>
+                <ShoppingCartOutlinedIcon sx={{ fontSize: "24px" }} />
+                <span>Cart</span>
+              </Icon>
+            </StyledLink>
+          </Right>
+        )}
       </Wrapper>
     </Container>
   );

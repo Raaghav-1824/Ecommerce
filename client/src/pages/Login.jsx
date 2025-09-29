@@ -1,13 +1,16 @@
 import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { login } from "../redux/apiCalls";
+import { login, registerStart } from "../redux/apiCalls";
 import { mobile } from "../reponsive";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { register } from "../redux/userRedux";
+
+
 
 const Container = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background: linear-gradient(
       rgba(255, 255, 255, 0.5),
@@ -19,12 +22,17 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+ 
+
 `;
+
 
 const Wrapper = styled.div`
   width: 25%;
   padding: 20px;
   background-color: white;
+  box-shadow: 0px 5px 10px grey;
+  border-radius: 10px;
   ${mobile({ width: "75%" })}
 `;
 
@@ -36,6 +44,10 @@ const Title = styled.h1`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  gap:5px;
+  flex-wrap: wrap; 
+  
 `;
 
 const Input = styled.input`
@@ -56,6 +68,7 @@ const Button = styled.button`
   &:disabled {
     color: green;
     cursor: not-allowed;
+
   }
 `;
 
@@ -81,10 +94,16 @@ const Login = () => {
     e.preventDefault();
     login(dispatch, { username, password }).then(() => {
       if (currentUser) {
-        navigate("/"); // Redirect to home after login
+        navigate("/"); 
       }
     });
   };
+
+  const handleCreateUser = (e) => {
+     navigate("/register")
+  }
+
+
   return (
     <Container>
       <Wrapper>
@@ -104,7 +123,7 @@ const Login = () => {
           </Button>
           {error && <Error>Something went wrong...</Error>}
           <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
-          <Link>CREATE A NEW ACCOUNT</Link>
+          <Link onClick={handleCreateUser}>CREATE A NEW ACCOUNT</Link>
         </Form>
       </Wrapper>
     </Container>

@@ -39,6 +39,7 @@ const Products = ({ cat, filters, sort }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
 
+
   useEffect(() => {
     const getProducts = async () => {
       try {

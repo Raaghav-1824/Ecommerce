@@ -1,6 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { mobile } from "../reponsive";
+import { useDispatch , useSelector } from "react-redux";
+import { register } from "../redux/userRedux";
+import { registerStart } from "../redux/apiCalls";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import ErrorMessage from "../ui/error";
 
 const Container = styled.div`
   width: 100vw;
@@ -22,6 +28,8 @@ const Wrapper = styled.div`
   width: 40%;
   padding: 20px;
   background-color: white;
+  box-shadow: 0px 5px 10px grey;
+  border-radius: 10px;
   ${mobile({ width: "75%" })}
 `;
 
@@ -74,23 +82,63 @@ const Button = styled.button`
 `;
 
 const Register = () => {
+  const [formData , setFormData] = useState({
+    firstName : '',
+    lastName : '',
+    userName : '',
+    email : '',
+    password :'',
+    confirmPassword : '',
+      
+  })
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [passworderror , setPassworderror] = useState(null);
+  const {isFetching , error ,currentUser} =  useSelector((state) => state.user);
+ 
+
+  const handleChange = (e) => {
+    const {name , value} = e.target;
+     setFormData((prev) =>( { 
+      ...prev ,[name] : value
+     }))
+  }
+
+  const handleRegister = (e) => {
+     e.preventDefault();
+    setPassworderror("");
+     if(formData.password !== formData.confirmPassword){
+         setPassworderror("Password does not match");
+         return;
+    }
+     registerStart(dispatch , formData).then(()=>{
+        if(currentUser){
+          navigate("/"); 
+        }
+     })
+  }
+
   return (
     <Container>
       <Wrapper>
         <Title>CREATE AN ACCOUNT</Title>
         <Form>
-          <Input placeholder="First Name" />
-          <Input placeholder="Last Name" />
-          <Input placeholder="Username" />
-          <Input placeholder="Email" />
-          <Input placeholder="Password" />
-          <Input placeholder="Confirm Password" />
+          <Input value ={formData.firstName} name = "firstName" onChange = {handleChange}  placeholder="First Name" />
+          <Input value ={formData.lastName} name = "lastName" onChange = {handleChange} placeholder="Last Name" />
+          <Input value ={formData.userName} name = "userName" onChange = {handleChange} placeholder="Username" />
+          <Input value ={formData.email} name = "email" onChange = {handleChange} placeholder="Email" />
+          <Input value ={formData.password} name = "password" onChange = {handleChange} placeholder="Password" />
+          <Input value ={formData.confirmPassword} name = "confirmPassword" onChange = {handleChange} placeholder="Confirm Password" />
+          {passworderror && (
+            <ErrorMessage error = {passworderror}/>
+          )}
           <Agreement>
             {" "}
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>
           </Agreement>
-          <Button>CREATE</Button>
+          <Button onClick={handleRegister}>CREATE</Button>
         </Form>
       </Wrapper>
     </Container>

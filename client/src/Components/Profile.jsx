@@ -15,6 +15,7 @@ function Profile() {
 
   const handleLogout = () => {
     dispatch(logout());
+    navigate("/login")
   };
 
   const handleToggle = (event) => {
