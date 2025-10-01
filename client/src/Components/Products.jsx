@@ -6,6 +6,7 @@ import axios from "axios";
 import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import NavigateBeforeOutlinedIcon from "@mui/icons-material/NavigateBeforeOutlined";
 
+
 const Container = styled.div`
   display: flex;
   padding: 10px;
@@ -48,6 +49,7 @@ const Products = ({ cat, filters, sort }) => {
             ? `http://localhost:3000/api/products?category=${cat}`
             : "http://localhost:3000/api/products"
         );
+        // console.log("@@@@",res.data[1].img);
         setProducts(res.data);
       } catch (err) {
         console.log(err);

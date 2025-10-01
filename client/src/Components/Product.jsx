@@ -25,10 +25,12 @@ const Info = styled.div`
 `;
 
 const Container = styled.div`
-  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+
   margin: 2px;
   height: 300px;
-  min-width: 280px;
+  min-width: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,17 +41,17 @@ const Container = styled.div`
   }
 `;
 const Circle = styled.div`
-  width: 200px;
-  height: 200px;
-  background-color: white;
-  border-radius: 50%;
-  position: absolute;
-`;
+//   width: 200px;
+//   height: 200px;
+//   background-color: white;
+//   border-radius: 50%;
+//   position: absolute;
+// `;
 const Image = styled.img`
-  height: 75%;
-  width : 65%;
+  height: 100%;
+  width : 100%;
   z-index: 2;
-  object-fit: contain;
+  object-fit: cover;
 `;
 
 const Icon = styled.div`
@@ -77,8 +79,7 @@ const Product = ({ item }) => {
 
   return (
     <Container>
-      <Circle />
-      <Image src={item.img} />
+      <Image src={item.image} />
       <Info>
         <Link to={`/cart`}>
           <Icon>

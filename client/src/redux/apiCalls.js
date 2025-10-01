@@ -1,5 +1,4 @@
 import { loginFailure, loginStart, loginSuccess, register, registerSuccess, registerFailure } from "./userRedux";
-
 import axios from "axios";
 
 export const login = async (dispatch, user) => {
