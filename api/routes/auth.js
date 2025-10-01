@@ -17,13 +17,13 @@ authRouter.post("/register", async (req, res) => {
     email: req.body.email,
     password: CryptoJS.AES.encrypt(
       req.body.password,
-      process.env.AUTH_KEY
+      process.env.SEC_KEY
     ).toString(),
-
+    isAdmin : req.body.isAdmin
   });
 
   try {
-    console.log(newUser);
+    // console.log(newUser);
  
     const savedUser = await newUser.save();
     res.status(200).json(savedUser);
@@ -50,11 +50,20 @@ authRouter.post("/login", async (req, res) => {
         message: "User does not exist",
       });
     }
+    
+// jab tum CryptoJS.AES.decrypt() use karte ho, woh tumhe ek WordArray object deta hai (yeh basically raw binary/bytes hota hai, jo directly readable nahi hota).
+// toString(CryptoJS.enc.Utf8) us raw data ko normal readable text (string) mein convert karta hai.
+// Matlab:
+// Encrypted → Decrypt kiya → Mila kuch raw gibberish bytes → Usko UTF-8 encoding ke through human-readable password string bana diya.
+
+    // console.log("AAAAA", user.password);
     const hashedPassword = CryptoJS.AES.decrypt(
       user.password,
       process.env.SEC_KEY
     );
+    // console.log("BBBBBB",hashedPassword);
     const decryptedPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
+    // console.log("CCCCCCc",decryptedPassword);
 
     if (req.body.password !== decryptedPassword) {
       return res.status(401).json({
@@ -69,7 +78,7 @@ authRouter.post("/login", async (req, res) => {
     const accessToken = jsonwebtoken.sign(
       {
         id: user._id,
-        isAdmin: user.isAdmin,
+        isAdmin: user.isAdmin | true,
       },
       process.env.JWT_SEC,
       { expiresIn: "3d" }

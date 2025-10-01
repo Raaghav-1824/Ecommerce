@@ -1,7 +1,8 @@
 import jsonwebtoken from "jsonwebtoken";
 
 const verifyToken = (req, res, next) => {
-  const authHeader = req.headers.token;
+  const authHeader = req.headers.authorization;
+  // console.log(req.headers.authorization)
   if (authHeader) {
     const token = authHeader.split(" ")[1];
     jsonwebtoken.verify(token, process.env.JWT_SEC, (err, user) => {
@@ -29,6 +30,7 @@ const verifyTokenAndAuth = (req, res, next) => {
 const verifyTokenAndAdmin = (req, res, next) => {
   verifyToken(req, res, () => {
     if (req.user.isAdmin) {
+      console.log(req.user.isAdmin);
       next();
     } else {
       // console.log(req.user)

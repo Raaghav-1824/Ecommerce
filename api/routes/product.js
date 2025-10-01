@@ -1,6 +1,7 @@
 import express from "express";
 import { verifyTokenAndAuth, verifyTokenAndAdmin } from "./verifyToken.js";
 import Product from "../models/Product.js";
+import cloudinary from "../helper/cloudinary.js";
 
 const productRouter = express.Router();
 
@@ -98,8 +99,31 @@ productRouter.get("/", async (req, res) => {
     } else {
       products = await Product.find();
     }
-
-    res.status(200).json(products);
+    // console.log(products)
+    const extractPublicId = (url) => {
+      if (!url.includes('cloudinary.com')) {
+        return url.replace(/\.[^/.]+$/, ""); 
+      }
+      // Extract public ID from Cloudinary URL
+      const match = url.match(/\/upload\/[^\/]+\/(.+?)(?:\?|$)/);
+      return match ? match[1].replace(/\.[^/.]+$/, "") : url;
+    };
+    
+    const optimizedProducts = products.map(product => {
+      const publicId = extractPublicId(product.img);
+      
+      return {
+          ...product._doc,
+          image: cloudinary.url(publicId, {
+              fetch_format: "webp",
+              quality: "auto",
+              width: 500,
+              crop: "scale",
+          }),
+      };
+    });
+    console.log(optimizedProducts)
+  res.status(200).json(optimizedProducts);
   } catch (err) {
     res.status(500).json(err);
   }
