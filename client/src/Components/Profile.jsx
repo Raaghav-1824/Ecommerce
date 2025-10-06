@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Menu, MenuItem, IconButton } from "@mui/material";
+import { Menu, MenuItem } from "@mui/material";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";

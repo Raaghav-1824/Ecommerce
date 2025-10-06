@@ -5,7 +5,7 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { useDispatch } from "react-redux";
-import { addToWishlist } from "../redux/wishListRedux";
+// import { addToWishlist } from "../redux/wishListRedux";
 import { addProduct } from "../redux/wishListRedux";
 
 const Info = styled.div`
@@ -40,13 +40,7 @@ const Container = styled.div`
     opacity: 1;
   }
 `;
-const Circle = styled.div`
-//   width: 200px;
-//   height: 200px;
-//   background-color: white;
-//   border-radius: 50%;
-//   position: absolute;
-// `;
+
 const Image = styled.img`
   height: 100%;
   width : 100%;

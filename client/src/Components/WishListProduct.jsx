@@ -8,67 +8,74 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 const Info = styled.div`
   opacity: 0;
   position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.2);
-  z-index: 3;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 100%);
+  z-index: 2;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  transition: all 0.5s ease;
+  padding-bottom: 16px;
+  transition: opacity 0.3s ease;
   cursor: pointer;
 `;
 
 const Container = styled.div`
-  flex: 1;
-  margin: 2px;
-  height: 300px;
-  min-width: 280px;
-  /* max-width: 300px; */
+  width: 100%;
+  aspect-ratio: 4 / 5;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #f5fbfd;
   position: relative;
+  overflow: hidden;
+  
   &:hover ${Info} {
     opacity: 1;
   }
 `;
-const Circle = styled.div`
-  width: 200px;
-  height: 200px;
-  background-color: white;
-  border-radius: 50%;
-  position: absolute;
-`;
+// const Circle = styled.div`
+//   width: 200px;
+//   height: 200px;
+//   background-color: white;
+//   border-radius: 50%;
+//   position: absolute;
+// `;
 const Image = styled.img`
-  height: 75%;
-  z-index: 2;
+  height: 100%;
+  width: 100%;
   object-fit: cover;
+  transform: scale(1.02);
+  transition: transform 0.4s ease;
+  z-index: 1;
+  
+  ${Container}:hover & {
+    transform: scale(1.06);
+  }
 `;
 
 const Icon = styled.div`
-  margin: 10px;
+  margin: 8px;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  background-color: white;
+  border-radius: 10px;
+  background-color: rgba(255,255,255,0.95);
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.5s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  
   &:hover {
-    background-color: #e9f5f5;
-    transform: scale(1.1);
+    background-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
 `;
 
 const WishListProduct = ({ item}) => {
   return (
     <Container>
-      <Circle />
+      {/* <Circle /> */}
       <Image src={item.img} />
       <Info>
         <Icon>

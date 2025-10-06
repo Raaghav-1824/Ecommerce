@@ -9,16 +9,42 @@ import Navbar from "../Components/Navbar";
 import Button from "@mui/material/Button";
 import { width } from "@mui/system";
 
-const Container = styled.div`
-  display: flex;
-  padding: 10px;
-  flex-wrap: wrap;
+const PageWrapper = styled.div`
+  background-color: #f8f9fa;
+  min-height: 100vh;
 `;
+
+const Container = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
 const ProductWrapper = styled.div`
-  flex: 1 1 23%;
-  margin: 5px;
-  min-width: 250px;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow: hidden;
 `;
 
 const WishlistPage = () => {
@@ -26,7 +52,7 @@ const WishlistPage = () => {
   console.log("wishlistProducts : ", wishlistProduct);
 
   return (
-    <div>
+    <PageWrapper>
       <Announcements />
       <Navbar />
       <Container>
@@ -36,17 +62,19 @@ const WishlistPage = () => {
               <WishListProduct item={product.item} />
               <Button
                 variant="outlined"
-                sx={{ width: "100%", borderRadius: "0px", fontWeight: "500" }}
+                sx={{ width: "100%", borderRadius: 0, fontWeight: 600, py: 1.5 }}
               >
                 Add to Cart
               </Button>
             </ProductWrapper>
           ))
         ) : (
-          <p>Your wishlist is empty.</p>
+          <p style={{ color: "#555", gridColumn: "1 / -1", textAlign: "center" }}>
+            Your wishlist is empty.
+          </p>
         )}
       </Container>
-    </div>
+    </PageWrapper>
   );
 };
 
