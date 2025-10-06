@@ -5,6 +5,8 @@ import Product from "./Product";
 import axios from "axios";
 import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import NavigateBeforeOutlinedIcon from "@mui/icons-material/NavigateBeforeOutlined";
+import { publicRequest } from "../requestMethods";
+
 
 
 const Container = styled.div`
@@ -44,10 +46,10 @@ const Products = ({ cat, filters, sort }) => {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const res = await axios.get(
+        const res = await publicRequest.get(
           cat
-            ? `http://localhost:3000/api/products?category=${cat}`
-            : "http://localhost:3000/api/products"
+            ? `/products?category=${cat}`
+            : "/products"
         );
         // console.log("@@@@",res.data[1].img);
         setProducts(res.data);
