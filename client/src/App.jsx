@@ -3,7 +3,7 @@ import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
-// 👇 LAZY LOAD ALL ROUTE COMPONENTS
+// LAZY LOAD ALL 
 const BuyProdcut = lazy(() => import("./pages/BuyProdcut"));
 const Home = lazy(() => import("./pages/Home"));
 const ProductList = lazy(() => import("./pages/ProductList"));
