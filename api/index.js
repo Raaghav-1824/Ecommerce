@@ -37,3 +37,7 @@ app.use("/api/wishlist" , wishlistRouter)
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+app.get('/', (req, res) => {
+  res.send('API is running successfully!'); // This would resolve the 404 for the root URL
+});
