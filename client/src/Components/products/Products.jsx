@@ -5,7 +5,7 @@ import Product from "./Product";
 import axios from "axios";
 import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import NavigateBeforeOutlinedIcon from "@mui/icons-material/NavigateBeforeOutlined";
-import { publicRequest } from "../requestMethods";
+import { publicRequest } from "../../requestMethods";
 
 
 

@@ -1,27 +1,55 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
-import { mobile } from "../reponsive";
+import { mobile } from "../../reponsive";
 
 const Container = styled.div`
-  min-height: 60vh;
-  background-color: #f8f9fa;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   padding: 80px 20px;
   position: relative;
+  overflow: hidden;
   
   ${mobile({ 
-    minHeight: "50vh", 
+    height: "100vh", 
     padding: "60px 20px" 
   })}
 `;
 
+const BackgroundImage = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("https://images.pexels.com/photos/6984650/pexels-photo-6984650.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+`;
+
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 2;
+`;
+
 const ContentWrapper = styled.div`
   text-align: center;
-  z-index: 2;
+  z-index: 3;
   position: relative;
   max-width: 800px;
   width: 100%;
@@ -31,10 +59,11 @@ const Title = styled.h1`
   font-size: clamp(2.5rem, 5vw, 4rem);
   margin-bottom: 24px;
   text-align: center;
-  color: #1a1a1a;
+  color: white;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   
   ${mobile({ 
     fontSize: "2.5rem",
@@ -45,12 +74,13 @@ const Title = styled.h1`
 const Desc = styled.p`
   font-size: clamp(1rem, 2vw, 1.25rem);
   font-weight: 400;
-  color: #555;
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 48px;
   line-height: 1.6;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   
   ${mobile({ 
     fontSize: "1rem",
@@ -168,15 +198,15 @@ const Newsletter = () => {
 
   return (
     <Container>
+      <BackgroundImage />
+      <Overlay />
       <ContentWrapper>
-        <Title>Stay in the Loop</Title>
-        <Desc>
-          Get exclusive updates, early access to new products, and special offers delivered straight to your inbox.
-        </Desc>
+        <Title>SUBSCRIBE OUR WEBSITE AND BECOME A</Title>
+        <Desc>MEMBER OF OUR WEBSITE</Desc>
         <form onSubmit={handleSubmit}>
           <InputContainer>
             <Input 
-              placeholder="Enter your email address" 
+              placeholder="EMAIL" 
               type="email" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}

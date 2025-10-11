@@ -7,14 +7,14 @@ import XIcon from "@mui/icons-material/X";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
 import CallOutlinedIcon from "@mui/icons-material/CallOutlined";
-import { mobile } from "../reponsive";
+import { mobile } from "../../reponsive";
 
 const Container = styled.div`
   background-color: #1a1a1a;
   color: white;
   padding: 60px 0 20px;
   position: relative;
-  margin-top:100px ;
+  /* margin-top:100px ; */
 `;
 
 const FooterContent = styled.div`

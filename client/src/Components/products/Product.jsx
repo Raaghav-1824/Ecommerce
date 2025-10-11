@@ -6,7 +6,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { useDispatch } from "react-redux";
 // import { addToWishlist } from "../redux/wishListRedux";
-import { addProduct } from "../redux/wishListRedux";
+import { addProduct } from "../../redux/wishListRedux";
 
 const Info = styled.div`
   opacity: 0;
@@ -29,7 +29,7 @@ const Container = styled.div`
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 
   margin: 2px;
-  height: 300px;
+  height: 70vh;
   min-width: fit-content;
   display: flex;
   justify-content: center;
@@ -57,7 +57,7 @@ const Icon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.5s ease;
+  transition: all 0.5s ease-in-out;
   &:hover {
     background-color: #e9f5f5;
     transform: scale(1.1);

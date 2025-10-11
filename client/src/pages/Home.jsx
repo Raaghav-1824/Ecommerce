@@ -1,16 +1,16 @@
 import React from 'react';
-import Navbar from '../Components/Navbar';
-import Announcements from '../Components/Announcements';
-import Slider from '../Components/Slider';
-import Categories from '../Components/Categories';
-import Products from '../Components/Products';
-import Newsletter from '../Components/Newsletter';
-import Footer from '../Components/Footer';
+import Navbar from '../Components/layout/Navbar';
+import Announcements from '../Components/home/Announcements';
+import Slider from '../Components/home/Slider';
+import Categories from '../Components/home/Categories';
+import Products from '../Components/products/Products';
+import Newsletter from '../Components/home/Newsletter';
+import Footer from '../Components/layout/Footer';
 
 function Home() {
   return (
     <div>
-      <Announcements />
+      {/* <Announcements /> */}
       <Navbar />
       <Slider/>
       <Categories/>

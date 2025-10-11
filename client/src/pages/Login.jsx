@@ -88,16 +88,19 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isFetching, error, currentUser } = useSelector((state) => state.user);
+  const { isFetching, error, currentUser , isAuthenticated} = useSelector((state) => state.user);
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
-    login(dispatch, { username, password }).then(() => {
-      console.log(username , password);
-      if (currentUser) {
+    try {
+      const userData = await login(dispatch, { username, password });
+      console.log("Authentication cehck",isAuthenticated);
+      if(userData) {
         navigate("/"); 
       }
-    });
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   const handleCreateUser = (e) => {

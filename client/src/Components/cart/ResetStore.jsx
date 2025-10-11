@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { resetCart } from '../redux/cartRedux';
+import { resetCart } from '../../redux/cartRedux';
 
 const ClearStore = styled.button`
   padding: 10px;

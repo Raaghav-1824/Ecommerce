@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import fetchWishlist from "../redux/wishListRedux"; // asyncThunk action to fetch wishlist from DB
-import WishListProduct from "../Components/WishListProduct";
+import WishListProduct from "../Components/products/WishListProduct";
 import { createGlobalStyle } from "styled-components";
 import styled from "styled-components";
-import Announcements from "../Components/Announcements";
-import Navbar from "../Components/Navbar";
+import Announcements from "../Components/home/Announcements";
+import Navbar from "../Components/layout/Navbar";
 import Button from "@mui/material/Button";
 import { width } from "@mui/system";
 

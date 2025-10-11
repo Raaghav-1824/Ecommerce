@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import ArrowLeftOutlinedIcon from "@mui/icons-material/ArrowLeftOutlined";
-import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
-import { sliderItems } from "../data";
-import { mobile } from "../reponsive";
+// import ArrowLeftOutlinedIcon from "@mui/icons-material/ArrowLeftOutlined";
+// import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
+import { sliderItems } from "../../data";
+import { mobile } from "../../reponsive";
 import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
-  height: 90vh;
+  height: 100vh;
   display: flex;
   position: relative;
   overflow: hidden;
@@ -227,6 +227,128 @@ const Dot = styled.div`
   }
 `;
 
+// Add styled components for the hero section
+const HeroContainer = styled.section`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+`;
+
+const BackgroundVideo = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+`;
+
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 80px;
+  z-index: 2;
+  color: white;
+
+  ${mobile({
+    padding: "0 20px",
+    alignItems: "center",
+    textAlign: "center"
+  })}
+`;
+
+const HeroTitle = styled.h1`
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease forwards;
+
+  ${mobile({
+    fontSize: "2.5rem",
+    marginBottom: "15px",
+    letterSpacing: "1px"
+  })}
+`;
+
+const HeroDescription = styled.p`
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  max-width: 600px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease 0.3s forwards;
+
+  ${mobile({
+    fontSize: "1rem",
+    marginBottom: "20px",
+    maxWidth: "100%"
+  })}
+`;
+
+const HeroButton = styled.button`
+  font-size: 1.1rem;
+  padding: 15px 40px;
+  border: 2px solid white;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border-radius: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease 0.6s forwards;
+
+  &:hover {
+    background-color: white;
+    color: #1a1a1a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+  }
+
+  ${mobile({
+    fontSize: "1rem",
+    padding: "12px 30px"
+  })}
+`;
+
+// Add keyframes for animation
+const keyframes = `
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
 const Slider = () => {
   const [sliderIndex, setSliderIndex] = useState(0);
   const navigate = useNavigate();
@@ -256,7 +378,9 @@ const Slider = () => {
 
   return (
     <Container>
-      <Arrow direction="left" onClick={() => handleClick("left")}>
+      <style>{keyframes}</style>
+      
+      {/* <Arrow direction="left" onClick={() => handleClick("left")}>
         <ArrowLeftOutlinedIcon />
       </Arrow>
       <Wrapper sliderIndex={sliderIndex}>
@@ -284,7 +408,25 @@ const Slider = () => {
             onClick={() => setSliderIndex(index)}
           />
         ))}
-      </DotsContainer>
+      </DotsContainer> */}
+
+      <HeroContainer>
+        <BackgroundVideo
+          autoPlay
+          loop
+          muted
+          playsInline
+          src="https://res.cloudinary.com/djkdzifmo/video/upload/v1760210485/7871230-uhd_4096_2160_25fps_hum2hy.mp4"
+          type="video/mp4"
+        />
+        <Overlay>
+          <HeroTitle>FEEL STRONG FEEL FASHIONABLE</HeroTitle>
+          <HeroDescription>
+            "Fashion is not something that exists in dresses only. Fashion is in the sky, in the street, fashion has to do with ideas, the way we live, what is happening."
+          </HeroDescription>
+          <HeroButton onClick={handleBtnClick}>BUY NOW</HeroButton>
+        </Overlay>
+      </HeroContainer>
     </Container>
   );
 };

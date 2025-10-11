@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import Navbar from "../Components/Navbar";
-import Announcements from "../Components/Announcements";
-import Footer from "../Components/Footer";
+import Navbar from "../Components/layout/Navbar";
+import Announcements from "../Components/home/Announcements";
+import Footer from "../Components/layout/Footer";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { mobile } from "../reponsive";
 import { useSelector } from "react-redux";
-import ResetStore from "../Components/ResetStore";
+import ResetStore from "../Components/cart/ResetStore";
 import StripeCheckout from "react-stripe-checkout";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";

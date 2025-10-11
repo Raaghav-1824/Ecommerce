@@ -4,7 +4,7 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { logout } from "../redux/userRedux";
+import { logout } from "../../redux/userRedux";
 
 function Profile() {
   const [anchorEl, setAnchorEl] = useState(null);
