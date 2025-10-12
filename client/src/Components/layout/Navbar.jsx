@@ -266,12 +266,12 @@ const Navbar = () => {
             <IconsGrid>
               <IconLink onClick={() => handleLogoutAndNavigate('/login')}>
                 <PersonOutlineOutlinedIcon sx={{ fontSize: 32 }} />
-                <span>{user ? 'Logout & Login' : 'Login'}</span>
+                <span>Login</span>
               </IconLink>
               
               <IconLink onClick={() => handleLogoutAndNavigate('/register')}>
                 <PersonOutlineOutlinedIcon sx={{ fontSize: 32 }} />
-                <span>{user ? 'Logout & Register' : 'Register'}</span>
+                <span>Register</span>
               </IconLink>
               
               <IconLink onClick={() => handleNavigation('/wishlist')}>
