@@ -32,7 +32,7 @@ const MenuBurger = styled.div`
     width: 35px;
     height: 25px;
     top: 20px;
-    left: 20px;
+    right : 20px;
   `)}
 `;
 
@@ -99,9 +99,15 @@ const Curtain = styled.div`
   }
   
   ${mobile(`
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    width: 20%;
+    height: 100%;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: none;
+    transform: ${(props) => props.isOpen ? 'translateX(0)' : 'translateX(-100%)'};
+    
+    &:last-child {
+      border-right: none;
+    }
   `)}
 `;
 
@@ -131,6 +137,9 @@ const CurtainContent = styled.div`
   transition: all 0.5s ease;
   transition-delay: ${props => props.isOpen ? (0.5 + props.index * 0.09) : 0}s;
   text-align: center;
+  ${mobile(`
+    transform: ${props => props.isOpen ? 'translateX(0)' : 'translateX(30px)'};
+  `)}
 `;
 
 const MenuItem = styled.a`

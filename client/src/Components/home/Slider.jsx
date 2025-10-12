@@ -13,7 +13,7 @@ const Container = styled.div`
   position: relative;
   overflow: hidden;
   background: #f8f9fa;
-  ${mobile({ height: "70vh" })}
+  ${mobile({ height: "100vh" })}
 `;
 
 const Arrow = styled.div`
@@ -268,7 +268,8 @@ const Overlay = styled.div`
   ${mobile({
     padding: "0 20px",
     alignItems: "center",
-    textAlign: "center"
+    textAlign: "center",
+    // flexDirection: "row"
   })}
 `;
 

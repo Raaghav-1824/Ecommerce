@@ -496,7 +496,7 @@ const Cart = () => {
 
   return (
     <Container>
-      <Announcements />
+      {/* <Announcements /> */}
       <Navbar />
 
       <Wrapper>

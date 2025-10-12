@@ -344,7 +344,7 @@ const WishlistPage = () => {
   return (
     <PageWrapper>
       <Navbar />
-      <Announcements />
+      {/* <Announcements /> */}
       
       <Header>
         <HeaderContent>
