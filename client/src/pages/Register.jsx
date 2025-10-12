@@ -40,7 +40,7 @@ const Wrapper = styled.div`
   padding: 50px 40px;
   background: rgba(255, 255, 255, 0.98);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  border-radius: 20px;
+  /* border-radius: 20px; */
   position: relative;
   z-index: 1;
   backdrop-filter: blur(10px);
@@ -97,7 +97,7 @@ const Input = styled.input`
   padding: 15px 20px;
   font-size: 15px;
   border: 2px solid #e0e0e0;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   background-color: #fafafa;
   color: #1a1a1a;
   transition: all 0.3s ease;
@@ -164,7 +164,7 @@ const Button = styled.button`
   color: white;
   border: none;
   cursor: pointer;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   letter-spacing: 1px;
   text-transform: uppercase;
   transition: all 0.3s ease;
