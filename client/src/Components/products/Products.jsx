@@ -12,7 +12,7 @@ const mobile = (styles) => `
 `;
 
 const Wrapper = styled.div`
-  padding: 20px;
+  padding: 10px;
   background: #ffffff;
   
   ${mobile(`
@@ -23,8 +23,8 @@ const Wrapper = styled.div`
 const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 0px;
+  /* margin-bottom: 20px; */
   
   ${mobile(`
     grid-template-columns: repeat(2, 1fr);
@@ -210,7 +210,7 @@ const Products = ({ cat, filters, sort }) => {
           ))
         )}
       </Container>
-
+{/* 
       {!loading && sortedProducts.length > 0 && totalPages > 1 && (
         <PaginationWrapper>
           <PaginationButton
@@ -231,7 +231,7 @@ const Products = ({ cat, filters, sort }) => {
             <NavigateNextOutlinedIcon />
           </PaginationButton>
         </PaginationWrapper>
-      )}
+      )} */}
     </Wrapper>
   );
 };

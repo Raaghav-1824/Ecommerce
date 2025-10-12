@@ -19,14 +19,14 @@ const GlobalStyle = createGlobalStyle`
 const categories = [
   {
     id: 1,
-    img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200",
+    img: "https://res.cloudinary.com/djkdzifmo/image/upload/v1760304071/pexels-enginakyurt-4458518_bnuiyj.jpg",
     title: "SUMMER ANTHOLOGIES",
     cat: "summer",
     description: "A sundress or summer dress is an informal or casual dress intended to be worn in warm weather, typically in a lightweight fabric, most commonly cotton, and usually loose-fitting. It is commonly a bodice style sleeveless dress, typically with a wide neckline and thin shoulder straps, and may be backless"
   },
   {
     id: 2,
-    img: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=1200",
+    img: "https://res.cloudinary.com/djkdzifmo/image/upload/v1760304070/pexels-fahmi-garna-249814583-13094187_pslcxc.jpg",
     title: "WINTER ANTHOLOGIES",
     cat: "winter",
     description: "Often they have a good water resistance consist of multiple layers to protect and insulate against low temperatures. Winter clothes are especially outerwear like coats jackets hats scarves and gloves or mittens earmuffs but also warm underwear like long underwear union suits and socks"
@@ -40,7 +40,7 @@ const categories = [
   },
   {
     id: 4,
-    img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=1200",
+    img: "https://res.cloudinary.com/djkdzifmo/image/upload/v1760304070/pexels-enginakyurt-4458521_byn7rq.jpg",
     title: "SPRING ANTHOLOGIES",
     cat: "jackets",
     description: "Spring collections celebrate renewal with light fabrics, fresh colors, and breathable designs. This seasonal anthology features contemporary pieces that embody elegance and comfort, perfect for embracing the warmth and vitality of spring weather"
@@ -111,8 +111,8 @@ const ContentPanel = styled.div`
 const CategoryTitle = styled.h1`
   font-family: 'Spartan', sans-serif;
   font-weight: 500;
-  color: #585151d1;
-  font-size: 24px;
+  color: black;
+  font-size: 26px;
   margin-bottom: 30px;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -125,11 +125,11 @@ const CategoryTitle = styled.h1`
 `;
 
 const CategoryDescription = styled.p`
-  font-size: 13px;
+  font-size: 14px;
   font-family: 'Spartan', sans-serif;
   line-height: 26px;
   text-align: center;
-  color: #464545;
+  color: black;
   margin-bottom: 40px;
   max-width: 500px;
   
@@ -147,14 +147,14 @@ const ShowMoreButton = styled.button`
   font-weight: 400;
   padding: 16px 48px;
   border: 1px solid #585151d1;
-  color: #585151d1;
+  color: black;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   text-transform: uppercase;
   letter-spacing: 1px;
   
   &:hover {
-    background: #585151d1;
+    background:rgba(0, 0, 0, 0.82);
     color: #ffffff;
   }
   
