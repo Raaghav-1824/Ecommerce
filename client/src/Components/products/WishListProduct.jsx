@@ -1,87 +1,112 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-
-const Info = styled.div`
-  opacity: 0;
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 100%);
-  z-index: 2;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 16px;
-  transition: opacity 0.3s ease;
-  cursor: pointer;
-`;
 
 const Container = styled.div`
   width: 100%;
-  aspect-ratio: 4 / 5;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f5fbfd;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+  font-family: 'Spartan', sans-serif;
   
-  &:hover ${Info} {
-    opacity: 1;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(45deg, black,rgba(54, 51, 51, 0.59));
+    transition: all 0.3s ease-in-out;
+    z-index: 9;
+  }
+  
+  &:hover::before {
+    width: 100%;
   }
 `;
-// const Circle = styled.div`
-//   width: 200px;
-//   height: 200px;
-//   background-color: white;
-//   border-radius: 50%;
-//   position: absolute;
-// `;
+
 const Image = styled.img`
   height: 100%;
   width: 100%;
   object-fit: cover;
-  transform: scale(1.02);
-  transition: transform 0.4s ease;
+  position: relative;
   z-index: 1;
+`;
+
+const Info = styled.div`
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
   
   ${Container}:hover & {
-    transform: scale(1.06);
+    opacity: 1;
   }
 `;
 
 const Icon = styled.div`
-  margin: 8px;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background-color: rgba(255,255,255,0.95);
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a1a1a;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+  }
+  
+  svg {
+    font-size: 24px;
+    color: #1a1a1a;
+  }
   
   &:hover {
-    background-color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background:rgb(41, 38, 38);
+    transform: scale(1.1);
+    
+    svg {
+      color: #ffffff;
+    }
+    
+    a {
+      color: #ffffff;
+    }
   }
 `;
 
-const WishListProduct = ({ item}) => {
+const WishListProduct = ({ item }) => {
   return (
     <Container>
-      {/* <Circle /> */}
-      <Image src={item.img} />
+      <Image src={item?.img} alt={item?.title} />
       <Info>
         <Icon>
-          <Link to={`/product/${item._id}`}>
+          <Link to={`/product/${item?._id}`}>
             <SearchOutlinedIcon />
-            
           </Link>
         </Icon>
       </Info>

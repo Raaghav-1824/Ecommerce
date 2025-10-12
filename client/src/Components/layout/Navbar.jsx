@@ -4,6 +4,9 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../redux/userRedux";
 
 const mobile = (styles) => `
   @media only screen and (max-width: 990px) {
@@ -12,12 +15,12 @@ const mobile = (styles) => `
 `;
 
 const MenuBurger = styled.div`
-  width: 40px;
-  height: 30px;
+  width: 50px;
+  height: 40px;
   position: fixed;
-  top: 25px;
-  left: 30px;
-  display: flex;
+  top: 50px;
+  right :50px;
+  display : flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -35,7 +38,7 @@ const MenuBurger = styled.div`
 
 const BurgerLine = styled.div`
   width: 100%;
-  height: 3px;
+  height: 2px;
   background-color: ${props => props.isOpen ? '#fff' : '#1a1a1a'};
   transition: all 0.3s ease;
   transform-origin: center;
@@ -72,15 +75,34 @@ const MenuOverlay = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #000000;
   z-index: 9999;
+  display: flex;
+  pointer-events: ${props => props.isOpen ? 'auto' : 'none'};
+`;
+
+const Curtain = styled.div`
+  position: relative;
+  width: 20%;
+  height: 100%;
+  background-color: #000000;
+  transform: ${props => props.isOpen ? 'translateY(0)' : 'translateY(-100%)'};
+  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+  transition-delay: ${props => props.isOpen ? props.index * 0.09 : (4 - props.index) * 0.09}s;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  transform: ${props => props.isOpen ? 'translateY(0)' : 'translateY(-100%)'};
-  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-  opacity: ${props => props.isOpen ? '1' : '0'};
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  
+  &:last-child {
+    border-right: none;
+  }
+  
+  ${mobile(`
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  `)}
 `;
 
 const BrandName = styled.div`
@@ -89,43 +111,38 @@ const BrandName = styled.div`
   left: 50%;
   transform: translateX(-50%);
   color: #fff;
-  font-size: 32px;
-  font-family: 'Sacramento', cursive;
+  font-size: 42px;
   font-weight: 400;
-  z-index: 10000;
+  z-index: 10;
   opacity: ${props => props.isOpen ? '1' : '0'};
-  transition: opacity 0.3s ease 0.3s;
+  transition: opacity 0.5s ease 0.5s;
+  letter-spacing: 3px;
+
   
   ${mobile(`
-    font-size: 28px;
-    top: 20px;
+    font-size: 24px;
+    top: 15px;
   `)}
 `;
 
-const MenuContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-  padding: 20px;
-  
-  ${mobile(`
-    gap: 30px;
-  `)}
+const CurtainContent = styled.div`
+  opacity: ${props => props.isOpen ? '1' : '0'};
+  transform: ${props => props.isOpen ? 'translateY(0)' : 'translateY(30px)'};
+  transition: all 0.5s ease;
+  transition-delay: ${props => props.isOpen ? (0.5 + props.index * 0.09) : 0}s;
+  text-align: center;
 `;
 
 const MenuItem = styled.a`
   color: #fff;
-  font-size: 48px;
+  font-size: 25px;
   font-weight: 300;
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 3px;
   transition: all 0.3s ease;
-  opacity: ${props => props.isOpen ? '1' : '0'};
-  transform: ${props => props.isOpen ? 'translateY(0)' : 'translateY(30px)'};
-  transition-delay: ${props => props.delay}s;
   cursor: pointer;
+  display: block;
   
   &:hover {
     color: #999;
@@ -133,7 +150,7 @@ const MenuItem = styled.a`
   }
   
   ${mobile(`
-    font-size: 32px;
+    font-size: 28px;
     letter-spacing: 2px;
     
     &:hover {
@@ -142,18 +159,14 @@ const MenuItem = styled.a`
   `)}
 `;
 
-const MenuIcons = styled.div`
-  display: flex;
-  gap: 40px;
-  margin-top: 40px;
-  opacity: ${props => props.isOpen ? '1' : '0'};
-  transform: ${props => props.isOpen ? 'translateY(0)' : 'translateY(30px)'};
-  transition: all 0.3s ease;
-  transition-delay: 0.6s;
+const IconsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  padding: 20px;
   
   ${mobile(`
-    gap: 30px;
-    margin-top: 30px;
+    gap: 20px;
   `)}
 `;
 
@@ -162,14 +175,19 @@ const IconLink = styled.a`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   text-decoration: none;
   transition: all 0.3s ease;
   cursor: pointer;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
   
   &:hover {
     color: #999;
     transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.05);
   }
   
   span {
@@ -177,14 +195,20 @@ const IconLink = styled.a`
     text-transform: uppercase;
     letter-spacing: 1px;
   }
+  
+  ${mobile(`
+    padding: 15px;
+    gap: 8px;
+  `)}
 `;
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.currentUser);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    // Prevent body scroll when menu is open
     if (!isMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -193,11 +217,27 @@ const Navbar = () => {
   };
 
   const handleNavigation = (path) => {
-    console.log(`Navigate to: ${path}`);
+    // console.log(`Navigate to: ${path}`);
+    navigate(path);
     setIsMenuOpen(false);
     document.body.style.overflow = 'auto';
-    // In your actual implementation, use: window.location.href = path;
   };
+
+  const handleLogoutAndNavigate = (path) => {
+    if (user) {
+      dispatch(logout());
+    }
+    navigate(path);
+    setIsMenuOpen(false);
+    document.body.style.overflow = 'auto';
+  };
+
+  const menuItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Products', path: '/products' },
+    { label: 'Cart', path: '/cart' },
+    { label: 'Wishlist', path: '/wishlist' }
+  ];
 
   return (
     <>
@@ -208,63 +248,44 @@ const Navbar = () => {
       </MenuBurger>
 
       <MenuOverlay isOpen={isMenuOpen}>
-        <BrandName isOpen={isMenuOpen}>Mart E-commerce</BrandName>
         
-        <MenuContent>
-          <MenuItem 
-            onClick={() => handleNavigation('/')}
-            isOpen={isMenuOpen}
-            delay={0.1}
-          >
-            Home
-          </MenuItem>
-          
-          <MenuItem 
-            onClick={() => handleNavigation('/products')}
-            isOpen={isMenuOpen}
-            delay={0.2}
-          >
-            Products
-          </MenuItem>
-          
-          <MenuItem 
-            onClick={() => handleNavigation('/about')}
-            isOpen={isMenuOpen}
-            delay={0.3}
-          >
-            About
-          </MenuItem>
-          
-          <MenuItem 
-            onClick={() => handleNavigation('/contact')}
-            isOpen={isMenuOpen}
-            delay={0.4}
-          >
-            Contact
-          </MenuItem>
-        </MenuContent>
-
-        <MenuIcons isOpen={isMenuOpen}>
-          <IconLink onClick={() => handleNavigation('/profile')}>
-            <PersonOutlineOutlinedIcon sx={{ fontSize: 28 }} />
-            <span>Profile</span>
-          </IconLink>
-          
-          <IconLink onClick={() => handleNavigation('/wishlist')}>
-            <FavoriteBorderOutlinedIcon sx={{ fontSize: 28 }} />
-            <span>Wishlist</span>
-          </IconLink>
-          
-          <IconLink onClick={() => handleNavigation('/search')}>
-            <SearchIcon sx={{ fontSize: 28 }} />
-            <span>Search</span>
-          </IconLink>
-          
-          <IconLink onClick={() => handleNavigation('/cart')}>
-            <ShoppingCartOutlinedIcon sx={{ fontSize: 28 }} />
-            <span>Cart</span>
-          </IconLink>
-        </MenuIcons>
+        {/* First 4 curtains with menu items */}
+        {menuItems.map((item, index) => (
+          <Curtain key={index} index={index} isOpen={isMenuOpen}>
+            <CurtainContent isOpen={isMenuOpen} index={index}>
+              <MenuItem onClick={() => handleNavigation(item.path)}>
+                {item.label}
+              </MenuItem>
+            </CurtainContent>
+          </Curtain>
+        ))}
+        
+        {/* 5th curtain with icons */}
+        <Curtain index={4} isOpen={isMenuOpen}>
+          <CurtainContent isOpen={isMenuOpen} index={4}>
+            <IconsGrid>
+              <IconLink onClick={() => handleLogoutAndNavigate('/login')}>
+                <PersonOutlineOutlinedIcon sx={{ fontSize: 32 }} />
+                <span>{user ? 'Logout & Login' : 'Login'}</span>
+              </IconLink>
+              
+              <IconLink onClick={() => handleLogoutAndNavigate('/register')}>
+                <PersonOutlineOutlinedIcon sx={{ fontSize: 32 }} />
+                <span>{user ? 'Logout & Register' : 'Register'}</span>
+              </IconLink>
+              
+              <IconLink onClick={() => handleNavigation('/wishlist')}>
+                <FavoriteBorderOutlinedIcon sx={{ fontSize: 32 }} />
+                <span>Wishlist</span>
+              </IconLink>
+              
+              <IconLink onClick={() => handleNavigation('/cart')}>
+                <ShoppingCartOutlinedIcon sx={{ fontSize: 32 }} />
+                <span>Cart</span>
+              </IconLink>
+            </IconsGrid>
+          </CurtainContent>
+        </Curtain>
       </MenuOverlay>
     </>
   );

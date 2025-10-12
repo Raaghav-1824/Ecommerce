@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Navbar from "../Components/layout/Navbar";
 import Announcements from "../Components/home/Announcements";
@@ -7,37 +7,108 @@ import Newsletter from "../Components/home/Newsletter";
 import Footer from "../Components/layout/Footer";
 import { mobile } from "../reponsive";
 import { useLocation } from "react-router";
-import { useState } from "react";
 
-const Container = styled.div``;
+const Container = styled.div`
+  background: #ffffff;
+  min-height: 100vh;
+`;
+
+const HeaderSection = styled.div`
+  padding: 60px 40px 40px;
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  color: #ffffff;
+  
+  ${mobile({ padding: "40px 20px 30px" })}
+`;
 
 const Title = styled.h1`
-  margin: 20px;
+  font-size: 48px;
+  font-weight: 200;
+  text-transform: uppercase;
+  letter-spacing: 8px;
+  margin: 0 0 10px 0;
+  
+  ${mobile({ fontSize: "32px", letterSpacing: "4px" })}
+`;
+
+const Subtitle = styled.p`
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  opacity: 0.7;
+  margin: 0;
 `;
 
 const FilterContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 30px 40px;
+  background: #f8f8f8;
+  border-bottom: 1px solid #e0e0e0;
+  
+  ${mobile({ 
+    flexDirection: "column", 
+    padding: "20px",
+    gap: "20px",
+    alignItems: "stretch"
+  })}
 `;
 
 const Filter = styled.div`
-  margin: 20px;
-  ${mobile({ width: "0px 20px", display: "flex", flexDirection: "column" })}
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  
+  ${mobile({ 
+    flexDirection: "column",
+    alignItems: "flex-start",
+    width: "100%"
+  })}
 `;
 
 const FilterText = styled.span`
-  font-size: 20px;
+  font-size: 12px;
   font-weight: 600;
-  margin-right: 20px;
-  ${mobile({ marginRight: "0px" })}
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #1a1a1a;
+  
+  ${mobile({ marginBottom: "10px" })}
 `;
 
 const Select = styled.select`
-  padding: 10px;
-  margin-right: 20px;
-  ${mobile({ margin: "10px 0px" })}
+  padding: 12px 20px;
+  border: 1px solid #1a1a1a;
+  background: #ffffff;
+  color: #1a1a1a;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  
+  &:hover {
+    background: #1a1a1a;
+    color: #ffffff;
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.2);
+  }
+  
+  ${mobile({ 
+    width: "100%",
+    marginBottom: "10px"
+  })}
 `;
-const Option = styled.option``;
+
+const Option = styled.option`
+  background: #ffffff;
+  color: #1a1a1a;
+`;
 
 const ProductList = () => {
   const location = useLocation();
@@ -55,10 +126,14 @@ const ProductList = () => {
 
   return (
     <Container>
-      <Announcements/>
-      <Navbar />
+      {/* <Announcements/> */}
+      {/* <Navbar /> */}
       
-      <Title>{cat}</Title>
+      {/* <HeaderSection>
+        <Title>{cat || "All Products"}</Title>
+        <Subtitle>Curated Collection</Subtitle>
+      </HeaderSection> */}
+      
       <FilterContainer>
         <Filter>
           <FilterText>Filter Products:</FilterText>
@@ -89,8 +164,8 @@ const ProductList = () => {
           </Select>
         </Filter>
       </FilterContainer>
+      
       <Products cat={cat} filters={filters} sort={sort} />
-      <Newsletter />
       <Footer />
     </Container>
   );

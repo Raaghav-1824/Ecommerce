@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from "react"; // Import lazy and Suspense
 import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import Loader from "./Components/cart/Loader";
 
 // LAZY LOAD ALL 
 const BuyProdcut = lazy(() => import("./pages/BuyProdcut"));
@@ -28,7 +29,7 @@ function App() {
               minHeight: "100vh",
             }}
           >
-            <h2>Loading Page...</h2>
+            <Loader></Loader>
           </div>
         }
       >

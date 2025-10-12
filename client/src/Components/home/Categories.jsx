@@ -1,6 +1,7 @@
 import React from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
-
+// import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
   
@@ -20,14 +21,14 @@ const categories = [
     id: 1,
     img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200",
     title: "SUMMER ANTHOLOGIES",
-    cat: "shirts",
+    cat: "summer",
     description: "A sundress or summer dress is an informal or casual dress intended to be worn in warm weather, typically in a lightweight fabric, most commonly cotton, and usually loose-fitting. It is commonly a bodice style sleeveless dress, typically with a wide neckline and thin shoulder straps, and may be backless"
   },
   {
     id: 2,
     img: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=1200",
     title: "WINTER ANTHOLOGIES",
-    cat: "sneakers",
+    cat: "winter",
     description: "Often they have a good water resistance consist of multiple layers to protect and insulate against low temperatures. Winter clothes are especially outerwear like coats jackets hats scarves and gloves or mittens earmuffs but also warm underwear like long underwear union suits and socks"
   },
   {
@@ -164,6 +165,9 @@ const ShowMoreButton = styled.button`
 `;
 
 const Categories = () => {
+
+  const navigate = useNavigate();
+
   return (
     <>
       <GlobalStyle />
@@ -183,7 +187,7 @@ const Categories = () => {
                       {item.description}
                     </CategoryDescription>
                     <ShowMoreButton 
-                      onClick={() => alert(`Navigate to /products/${item.cat}`)}
+                      onClick={() => navigate(`/products/${item.cat}`)}
                     >
                       Show More
                     </ShowMoreButton>
@@ -197,7 +201,7 @@ const Categories = () => {
                       {item.description}
                     </CategoryDescription>
                     <ShowMoreButton 
-                      onClick={() => alert(`Navigate to /products/${item.cat}`)}
+                      onClick={()=>navigate(`/products/${item.cat}`)}
                     >
                       Show More
                     </ShowMoreButton>
