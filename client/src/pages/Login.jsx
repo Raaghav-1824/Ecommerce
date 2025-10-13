@@ -234,8 +234,8 @@ const Login = () => {
     e.preventDefault();
     try {
       const userData = await login(dispatch, { username, password });
-      console.log(userData)
-      console.log("Authentication check", isAuthenticated);
+      // console.log(userData)
+      // console.log("Authentication check", isAuthenticated);
       if (userData) {
         navigate("/");
       }
