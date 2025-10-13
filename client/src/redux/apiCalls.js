@@ -21,7 +21,9 @@ export const registerStart = async (dispatch, newUser) => {
   try {
     const res = await publicRequest.post("/auth/register", newUser);
     dispatch(registerSuccess(res.data));
+    return res.data; // ✅ add this line
   } catch (err) {
     dispatch(registerFailure());
+    throw err; // optional, helps catch error in UI
   }
 };
