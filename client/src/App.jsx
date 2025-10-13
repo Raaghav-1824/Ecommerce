@@ -49,7 +49,7 @@ function App() {
           {/* public routes */}
           <Route
             path="/login"
-            element={user ? <Navigate to="/" /> : <Login />}
+            element={<Login />}
           />
           <Route path="/register" element={<Register />} />
 
