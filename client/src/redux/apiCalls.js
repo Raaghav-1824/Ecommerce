@@ -1,6 +1,6 @@
 import { publicRequest } from "../requestMethods";
 import { loginFailure, loginStart, loginSuccess, register, registerSuccess, registerFailure , isAuthenticated} from "./userRedux";
-import axios from "axios";
+// import axios from "axios";
 
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
@@ -10,7 +10,8 @@ export const login = async (dispatch, user) => {
     return res.data; // Return the user data
   } catch (err) {
     dispatch(loginFailure());
-    throw err; // Throw error so you can catch it
+    throw err; 
+    // console.log
   }
 };
 

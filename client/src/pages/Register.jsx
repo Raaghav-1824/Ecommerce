@@ -7,6 +7,7 @@ import { registerStart } from "../redux/apiCalls";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../ui/error";
+import { useEffect } from "react";
 
 const Container = styled.div`
   width: 100vw;
@@ -218,6 +219,10 @@ const Register = () => {
   const [passworderror, setPassworderror] = useState(null);
   const { isFetching, error, currentUser } = useSelector((state) => state.user);
 
+  // useEffect(() => {
+  //   if (currentUser) navigate("/");
+  // }, [currentUser, navigate]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -225,18 +230,19 @@ const Register = () => {
     }));
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setPassworderror("");
     if (formData.password !== formData.confirmPassword) {
       setPassworderror("Password does not match");
       return;
     }
-    registerStart(dispatch, formData).then(() => {
-      if (currentUser) {
-        navigate("/");
-      }
-    });
+    try {
+      const data = await registerStart(dispatch, formData);
+      if (data) navigate("/");
+    } catch (e) {
+      console.error(e)
+    }
   };
 
   return (

@@ -228,10 +228,13 @@ const Login = () => {
   const navigate = useNavigate();
   const { isFetching, error, currentUser, isAuthenticated } = useSelector((state) => state.user);
 
+
+  console.log(isFetching, error, currentUser, isAuthenticated)
   const handleClick = async (e) => {
     e.preventDefault();
     try {
       const userData = await login(dispatch, { username, password });
+      console.log(userData)
       console.log("Authentication check", isAuthenticated);
       if (userData) {
         navigate("/");
@@ -263,8 +266,7 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </InputWrapper>
-          <Button onClick={handleClick} disabled={isFetching}>
-            {isFetching ? "SIGNING IN..." : "LOGIN"}
+          <Button onClick={handleClick} disabled={isFetching}>            {isFetching ? "SIGNING IN..." : "LOGIN"}
           </Button>
           {error && <Error>Something went wrong...</Error>}
           <Divider />

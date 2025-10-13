@@ -14,19 +14,28 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-const persistConfig = {
+const userPersistConfig = {
+  key: "user",
+  version: 1,
+  storage,
+  whitelist: ["currentUser", "isAuthenticated"],
+};
+
+// persist everything else at root EXCEPT user (to avoid double persistence)
+const rootPersistConfig = {
   key: "root",
   version: 1,
   storage,
+  blacklist: ["user"],
 };
 
 const rootReducer = combineReducers({ 
-  user: userReducer, 
+  user: persistReducer(userPersistConfig, userReducer),
   cart: cartReducer,
   wishlist: wishlistReducer, // Add wishlist to rootReducer
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
