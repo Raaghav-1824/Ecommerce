@@ -2,12 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { mobile } from "../reponsive";
 import { useDispatch, useSelector } from "react-redux";
-import { register } from "../redux/userRedux";
+// import { register } from "../redux/userRedux";
 import { registerStart } from "../redux/apiCalls";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../ui/error";
-import { useEffect } from "react";
+// import { useForm, SubmitHandler } from "react-hook-form"
+
 
 const Container = styled.div`
   width: 100vw;
@@ -239,6 +240,7 @@ const Register = () => {
     }
     try {
       const data = await registerStart(dispatch, formData);
+      // console.log("Component response " ,data);
       if (data) navigate("/");
     } catch (e) {
       console.error(e)
@@ -256,6 +258,7 @@ const Register = () => {
               name="firstName"
               onChange={handleChange}
               placeholder="First Name"
+              required
             />
           </InputWrapper>
           <InputWrapper>
@@ -264,6 +267,7 @@ const Register = () => {
               name="lastName"
               onChange={handleChange}
               placeholder="Last Name"
+              required
             />
           </InputWrapper>
           <FullWidthInputWrapper>
@@ -272,6 +276,7 @@ const Register = () => {
               name="userName"
               onChange={handleChange}
               placeholder="Username"
+              required
             />
           </FullWidthInputWrapper>
           <FullWidthInputWrapper>
@@ -281,6 +286,7 @@ const Register = () => {
               onChange={handleChange}
               placeholder="Email"
               type="email"
+              required
             />
           </FullWidthInputWrapper>
           <InputWrapper>
@@ -290,6 +296,7 @@ const Register = () => {
               onChange={handleChange}
               placeholder="Password"
               type="password"
+              required
             />
           </InputWrapper>
           <InputWrapper>
@@ -299,6 +306,7 @@ const Register = () => {
               onChange={handleChange}
               placeholder="Confirm Password"
               type="password"
+              required
             />
           </InputWrapper>
           {passworderror && (

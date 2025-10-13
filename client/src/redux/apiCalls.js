@@ -20,6 +20,7 @@ export const registerStart = async (dispatch, newUser) => {
   dispatch(register());
   try {
     const res = await publicRequest.post("/auth/register", newUser);
+    console.log("api response " ,res.data)
     dispatch(registerSuccess(res.data));
     return res.data; // ✅ add this line
   } catch (err) {
