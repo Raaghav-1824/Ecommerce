@@ -122,7 +122,7 @@ productRouter.get("/", async (req, res) => {
           }),
       };
     });
-    console.log(optimizedProducts)
+    // console.log(optimizedProducts)
   res.status(200).json(optimizedProducts);
   } catch (err) {
     res.status(500).json(err);
