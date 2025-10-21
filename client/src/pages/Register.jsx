@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { mobile } from "../reponsive";
 import { useDispatch, useSelector } from "react-redux";
-// import { register } from "../redux/userRedux";
 import { registerStart } from "../redux/apiCalls";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../ui/error";
-// import { useForm, SubmitHandler } from "react-hook-form"
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 
 const Container = styled.div`
@@ -19,7 +18,7 @@ const Container = styled.div`
   align-items: center;
   position: relative;
   overflow: hidden;
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -29,7 +28,7 @@ const Container = styled.div`
     background-size: 50px 50px;
     animation: drift 20s linear infinite;
   }
-  
+
   @keyframes drift {
     0% { transform: translate(0, 0); }
     100% { transform: translate(50px, 50px); }
@@ -42,18 +41,17 @@ const Wrapper = styled.div`
   padding: 50px 40px;
   background: rgba(255, 255, 255, 0.98);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  /* border-radius: 20px; */
   position: relative;
   z-index: 1;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
   }
-  
+
   ${mobile({ width: "85%", padding: "40px 25px" })}
 `;
 
@@ -65,7 +63,7 @@ const Title = styled.div`
   color: #1a1a1a;
   letter-spacing: 2px;
   position: relative;
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -76,7 +74,7 @@ const Title = styled.div`
     height: 3px;
     background: linear-gradient(90deg, #1a1a1a, #666);
   }
-  
+
   ${mobile({ fontSize: "24px" })}
 `;
 
@@ -90,40 +88,48 @@ const InputWrapper = styled.div`
   flex: 1;
   min-width: calc(50% - 8px);
   position: relative;
-  
   ${mobile({ minWidth: "100%" })}
+`;
+
+const FullWidthInputWrapper = styled(InputWrapper)`
+  min-width: 100%;
 `;
 
 const Input = styled.input`
   width: 100%;
   padding: 15px 20px;
   font-size: 15px;
-  border: 2px solid #e0e0e0;
-  /* border-radius: 10px; */
+  border: 2px solid ${props => (props.error ? "red" : "#e0e0e0")};
   background-color: #fafafa;
   color: #1a1a1a;
   transition: all 0.3s ease;
   box-sizing: border-box;
-  
+
   &:focus {
     outline: none;
-    border-color: #1a1a1a;
+    border-color: ${props => (props.error ? "red" : "#1a1a1a")};
     background-color: #fff;
     box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
   }
-  
+
   &::placeholder {
     color: #999;
     text-transform: uppercase;
     font-size: 12px;
     letter-spacing: 1px;
   }
-  
+
   ${mobile({ padding: "12px 15px", fontSize: "14px" })}
 `;
 
-const FullWidthInputWrapper = styled(InputWrapper)`
-  min-width: 100%;
+const EyeIcon = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+
 `;
 
 const Agreement = styled.span`
@@ -134,19 +140,18 @@ const Agreement = styled.span`
   text-align: center;
   width: 100%;
   margin: 10px 0;
-  
+
   b {
     color: #1a1a1a;
     font-weight: 600;
     cursor: pointer;
     transition: color 0.3s ease;
-    
     &:hover {
       color: #000;
       text-decoration: underline;
     }
   }
-  
+
   ${mobile({ fontSize: "12px", margin: "10px 0" })}
 `;
 
@@ -166,13 +171,12 @@ const Button = styled.button`
   color: white;
   border: none;
   cursor: pointer;
-  /* border-radius: 10px; */
   letter-spacing: 1px;
   text-transform: uppercase;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -183,20 +187,20 @@ const Button = styled.button`
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
     transition: left 0.5s ease;
   }
-  
+
   &:hover::before {
     left: 100%;
   }
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   }
-  
+
   &:active {
     transform: translateY(0);
   }
-  
+
   ${mobile({ fontSize: "14px", width: "70%", padding: "12px 15px" })}
 `;
 
@@ -215,35 +219,75 @@ const Register = () => {
     confirmPassword: '',
   });
 
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [passworderror, setPassworderror] = useState(null);
-  const { isFetching, error, currentUser } = useSelector((state) => state.user);
-
-  // useEffect(() => {
-  //   if (currentUser) navigate("/");
-  // }, [currentUser, navigate]);
+  const { isFetching } = useSelector((state) => state.user);
+  const [showPassword , setShowPassword] = useState(false)
+  const [showConfirmPassword , setShowConfirmPassword] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev, [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
+
+    // Clear error for the field on change
+    setErrors(prev => ({ ...prev, [name]: '' }));
+  };
+
+  const validationField = (name, value) => {
+    const newErrors = {};
+    switch (name) {
+      case 'firstName':
+      case 'lastName':
+        if (value.length < 2) newErrors[name] = `${value.charAt(0).toUpperCase() + value.slice(1)} must be at least 2 characters.`;
+        else if (!/^[A-Za-z]+$/.test(value)) newErrors[name] = `${value.charAt(0).toUpperCase() + value.slice(1)} must contain only letters.`;
+        break;
+      case 'userName':
+        if (value.length < 4) newErrors.userName = 'Username must be at least 4 characters.';
+        else if (!/^[a-zA-Z0-9_]+$/.test(value)) newErrors.userName = 'Username can only contain letters, numbers, and underscores.';
+        break;
+      case 'email':
+        if (!value.length) newErrors.email = 'Email is required';
+        else if (!/\S+@\S+\.\S+/.test(value)) newErrors.email = 'Email is invalid';
+        break;
+      case 'password':
+        if (value.length < 8) newErrors.password = 'Password must be at least 8 characters.';
+        else if (!/[A-Z]/.test(value)) newErrors.password = 'Password must contain at least one uppercase letter.';
+        else if (!/[0-9]/.test(value)) newErrors.password = 'Password must contain at least one number.';
+        if (formData.confirmPassword && value !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match.';
+        break;
+      case 'confirmPassword':
+        if (value !== formData.password) newErrors.confirmPassword = 'Passwords do not match.';
+        break;
+      default:
+        break;
+    }
+    return newErrors;
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setPassworderror("");
-    if (formData.password !== formData.confirmPassword) {
-      setPassworderror("Password does not match");
+
+    // Validate all fields
+    const validationErrors = {
+      ...validationField('firstName', formData.firstName),
+      ...validationField('lastName', formData.lastName),
+      ...validationField('userName', formData.userName),
+      ...validationField('email', formData.email),
+      ...validationField('password', formData.password),
+      ...validationField('confirmPassword', formData.confirmPassword),
+    };
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
+
     try {
       const data = await registerStart(dispatch, formData);
-      // console.log("Component response " ,data);
       if (data) navigate("/");
-    } catch (e) {
-      console.error(e)
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -251,75 +295,88 @@ const Register = () => {
     <Container>
       <Wrapper>
         <Title>CREATE ACCOUNT</Title>
-        <Form>
+        <Form onSubmit={handleRegister}>
           <InputWrapper>
             <Input
-              value={formData.firstName}
               name="firstName"
+              value={formData.firstName}
               onChange={handleChange}
               placeholder="First Name"
-              required
+              error={errors.firstName}
             />
+            
+            {errors.firstName && <ErrorWrapper><ErrorMessage error={errors.firstName} /></ErrorWrapper>}
           </InputWrapper>
+
           <InputWrapper>
             <Input
-              value={formData.lastName}
               name="lastName"
+              value={formData.lastName}
               onChange={handleChange}
               placeholder="Last Name"
-              required
+              error={errors.lastName}
             />
+            {errors.lastName && <ErrorWrapper><ErrorMessage error={errors.lastName} /></ErrorWrapper>}
           </InputWrapper>
+
           <FullWidthInputWrapper>
             <Input
-              value={formData.userName}
               name="userName"
+              value={formData.userName}
               onChange={handleChange}
               placeholder="Username"
-              required
+              error={errors.userName}
             />
+            {errors.userName && <ErrorWrapper><ErrorMessage error={errors.userName} /></ErrorWrapper>}
           </FullWidthInputWrapper>
+
           <FullWidthInputWrapper>
             <Input
-              value={formData.email}
               name="email"
+              value={formData.email}
               onChange={handleChange}
               placeholder="Email"
               type="email"
-              required
+              error={errors.email}
             />
+            {errors.email && <ErrorWrapper><ErrorMessage error={errors.email} /></ErrorWrapper>}
           </FullWidthInputWrapper>
+
           <InputWrapper>
             <Input
-              value={formData.password}
               name="password"
+              value={formData.password}
               onChange={handleChange}
               placeholder="Password"
-              type="password"
-              required
+              type={showPassword ? "text" : "password"}
+              error={errors.password}
+              
             />
+           <EyeIcon onClick={()=>setShowPassword(!showPassword)}>{showPassword ? <VisibilityIcon style={{ fontSize: "18px" }}/> : <VisibilityOffIcon style={{ fontSize: "18px" }}/>}</EyeIcon>
+            {errors.password &&  <ErrorWrapper><ErrorMessage error={errors.password} /></ErrorWrapper>}
           </InputWrapper>
+
           <InputWrapper>
             <Input
-              value={formData.confirmPassword}
               name="confirmPassword"
+              value={formData.confirmPassword}
               onChange={handleChange}
               placeholder="Confirm Password"
-              type="password"
-              required
+              type={showConfirmPassword ? "text" : "password"}
+              error={errors.confirmPassword}
+              
             />
+            <EyeIcon onClick={()=>setShowConfirmPassword(!showConfirmPassword)}>{showConfirmPassword ? <VisibilityIcon style={{ fontSize: "18px" }} /> : <VisibilityOffIcon style={{ fontSize: "18px" }}/>}</EyeIcon>
+            {errors.confirmPassword && <ErrorWrapper><ErrorMessage error={errors.confirmPassword} /></ErrorWrapper>}
           </InputWrapper>
-          {passworderror && (
-            <ErrorWrapper>
-              <ErrorMessage error={passworderror} />
-            </ErrorWrapper>
-          )}
+
           <Agreement>
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>
           </Agreement>
+
           <ButtonWrapper>
-            <Button onClick={handleRegister}>CREATE</Button>
+            <Button type="submit" disabled={isFetching}>CREATE</Button>
           </ButtonWrapper>
         </Form>
       </Wrapper>

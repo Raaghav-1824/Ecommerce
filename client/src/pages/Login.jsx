@@ -6,6 +6,8 @@ import { mobile } from "../reponsive";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { register } from "../redux/userRedux";
+import { use } from "react";
+import ErrorMessage from "../ui/error";
 
 const Container = styled.div`
   width: 100%;
@@ -221,29 +223,67 @@ const Error = styled.span`
   }
 `;
 
+const ErrorWrapper = styled.div`
+  width: 100%;
+  margin-top: 5px;
+`;
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [authError , setAuthError] = useState(null);
+  const [validationErrors, setValidationErrors] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isFetching, error, currentUser, isAuthenticated } = useSelector((state) => state.user);
 
 
-  console.log(isFetching, error, currentUser, isAuthenticated)
-  const handleClick = async (e) => {
+
+  const validationField = (name, value) => {
+    const newErrors = {};
+    switch (name) {
+      case 'userName':
+        if (value.length < 4) newErrors.userName = 'Username must be at least 4 characters.';
+        else if (!/^[a-zA-Z0-9_]+$/.test(value)) newErrors.userName = 'Username can only contain letters, numbers, and underscores.';
+        break;
+      case 'password':
+        if (value.length < 8) newErrors.password = 'Password must be at least 8 characters.';
+        else if (!/[A-Z]/.test(value)) newErrors.password = 'Password must contain at least one uppercase letter.';
+        else if (!/[0-9]/.test(value)) newErrors.password = 'Password must contain at least one number.';
+        break;
+      default:
+        break;
+    }
+    return newErrors;
+  };
+
+  // console.log(isFetching, error, currentUser, isAuthenticated)
+  const handleLogin = async (e) => {
     e.preventDefault();
+    const validationErrors = {
+      ...validationField('userName', username),
+      ...validationField('password', password)
+    };
+
+    if (Object.keys(validationErrors).length > 0) {
+      setValidationErrors(validationErrors);
+      return;
+    }
+
     try {
       const userData = await login(dispatch, { username, password });
-      // console.log(userData)
-      // console.log("Authentication check", isAuthenticated);
       if (userData) {
         navigate("/");
       }
     } catch (error) {
+      setAuthError(error.message)
       console.error("Login failed:", error);
     }
   };
 
+  
+
+  
   const handleCreateUser = (e) => {
     navigate("/register");
   };
@@ -252,23 +292,30 @@ const Login = () => {
     <Container>
       <Wrapper>
         <Title>SIGN IN</Title>
-        <Form>
+        <Form onSubmit={handleLogin}>
           <InputWrapper>
             <Input
               placeholder="username"
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {setUsername(e.target.value)
+                setValidationErrors((prev) => ({...prev , userName : null}))
+              }}
             />
+            {validationErrors?.userName && <ErrorWrapper><ErrorMessage error={validationErrors?.userName} /></ErrorWrapper>}
           </InputWrapper>
           <InputWrapper>
             <Input
               placeholder="password"
               type="password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setValidationErrors((prev) => ({...prev , password : null}))
+              }}
             />
+          {validationErrors?.password &&  <ErrorWrapper><ErrorMessage error={validationErrors?.password} /></ErrorWrapper>}
+
           </InputWrapper>
-          <Button onClick={handleClick} disabled={isFetching}>            {isFetching ? "SIGNING IN..." : "LOGIN"}
+          <Button onClick={handleLogin} disabled={isFetching}> {isFetching ? "SIGNING IN..." : "LOGIN"}
           </Button>
-          {error && <Error>Something went wrong...</Error>}
+          {authError && <Error>{authError}</Error>}
           <Divider />
           <LinksContainer>
             <Link>Forgot your password?</Link>
