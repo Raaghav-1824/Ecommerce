@@ -32,7 +32,7 @@ const rootPersistConfig = {
 const rootReducer = combineReducers({ 
   user: persistReducer(userPersistConfig, userReducer),
   cart: cartReducer,
-  wishlist: wishlistReducer, // Add wishlist to rootReducer
+  wishlist: wishlistReducer, 
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);

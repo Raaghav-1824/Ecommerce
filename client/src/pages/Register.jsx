@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerStart } from "../redux/apiCalls";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../ui/error";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { validationField } from "../utils/validationError";
 
 const Container = styled.div`
   width: 100vw;
@@ -20,18 +20,26 @@ const Container = styled.div`
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px
+    );
     background-size: 50px 50px;
     animation: drift 20s linear infinite;
   }
 
   @keyframes drift {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(50px, 50px); }
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(50px, 50px);
+    }
   }
 `;
 
@@ -65,7 +73,7 @@ const Title = styled.div`
   position: relative;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -10px;
     left: 50%;
@@ -99,7 +107,7 @@ const Input = styled.input`
   width: 100%;
   padding: 15px 20px;
   font-size: 15px;
-  border: 2px solid ${props => (props.error ? "red" : "#e0e0e0")};
+  border: 2px solid ${(props) => (props.error ? "red" : "#e0e0e0")};
   background-color: #fafafa;
   color: #1a1a1a;
   transition: all 0.3s ease;
@@ -107,7 +115,7 @@ const Input = styled.input`
 
   &:focus {
     outline: none;
-    border-color: ${props => (props.error ? "red" : "#1a1a1a")};
+    border-color: ${(props) => (props.error ? "red" : "#1a1a1a")};
     background-color: #fff;
     box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
   }
@@ -129,7 +137,6 @@ const EyeIcon = styled.div`
   transform: translateY(-50%);
   cursor: pointer;
   color: #666;
-
 `;
 
 const Agreement = styled.span`
@@ -178,13 +185,18 @@ const Button = styled.button`
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
     transition: left 0.5s ease;
   }
 
@@ -211,75 +223,46 @@ const ErrorWrapper = styled.div`
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    userName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    firstName: "",
+    lastName: "",
+    userName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isFetching } = useSelector((state) => state.user);
-  const [showPassword , setShowPassword] = useState(false)
-  const [showConfirmPassword , setShowConfirmPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-
-    // Clear error for the field on change
-    setErrors(prev => ({ ...prev, [name]: '' }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const validationField = (name, value) => {
-    const newErrors = {};
-    switch (name) {
-      case 'firstName':
-      case 'lastName':
-        if (value.length < 2) newErrors[name] = `${value.charAt(0).toUpperCase() + value.slice(1)} must be at least 2 characters.`;
-        else if (!/^[A-Za-z]+$/.test(value)) newErrors[name] = `${value.charAt(0).toUpperCase() + value.slice(1)} must contain only letters.`;
-        break;
-      case 'userName':
-        if (value.length < 4) newErrors.userName = 'Username must be at least 4 characters.';
-        else if (!/^[a-zA-Z0-9_]+$/.test(value)) newErrors.userName = 'Username can only contain letters, numbers, and underscores.';
-        break;
-      case 'email':
-        if (!value.length) newErrors.email = 'Email is required';
-        else if (!/\S+@\S+\.\S+/.test(value)) newErrors.email = 'Email is invalid';
-        break;
-      case 'password':
-        if (value.length < 8) newErrors.password = 'Password must be at least 8 characters.';
-        else if (!/[A-Z]/.test(value)) newErrors.password = 'Password must contain at least one uppercase letter.';
-        else if (!/[0-9]/.test(value)) newErrors.password = 'Password must contain at least one number.';
-        if (formData.confirmPassword && value !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match.';
-        break;
-      case 'confirmPassword':
-        if (value !== formData.password) newErrors.confirmPassword = 'Passwords do not match.';
-        break;
-      default:
-        break;
-    }
-    return newErrors;
-  };
+
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
     // Validate all fields
     const validationErrors = {
-      ...validationField('firstName', formData.firstName),
-      ...validationField('lastName', formData.lastName),
-      ...validationField('userName', formData.userName),
-      ...validationField('email', formData.email),
-      ...validationField('password', formData.password),
-      ...validationField('confirmPassword', formData.confirmPassword),
+      ...validationField("firstName", formData.firstName),
+      ...validationField("lastName", formData.lastName),
+      ...validationField("userName", formData.userName),
+      ...validationField("email", formData.email),
+      ...validationField("password", formData.password),
+      ...validationField("confirmPassword", formData.confirmPassword),
+      ...validationField("passwordMatch" , {"password" : formData.password , "confirmPassword" : formData.password})
     };
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      console.log(validationErrors)
       return;
     }
 
@@ -304,8 +287,12 @@ const Register = () => {
               placeholder="First Name"
               error={errors.firstName}
             />
-            
-            {errors.firstName && <ErrorWrapper><ErrorMessage error={errors.firstName} /></ErrorWrapper>}
+
+            {errors.firstName && (
+              <ErrorWrapper>
+                <ErrorMessage error={errors.firstName} />
+              </ErrorWrapper>
+            )}
           </InputWrapper>
 
           <InputWrapper>
@@ -316,7 +303,11 @@ const Register = () => {
               placeholder="Last Name"
               error={errors.lastName}
             />
-            {errors.lastName && <ErrorWrapper><ErrorMessage error={errors.lastName} /></ErrorWrapper>}
+            {errors.lastName && (
+              <ErrorWrapper>
+                <ErrorMessage error={errors.lastName} />
+              </ErrorWrapper>
+            )}
           </InputWrapper>
 
           <FullWidthInputWrapper>
@@ -327,7 +318,11 @@ const Register = () => {
               placeholder="Username"
               error={errors.userName}
             />
-            {errors.userName && <ErrorWrapper><ErrorMessage error={errors.userName} /></ErrorWrapper>}
+            {errors.userName && (
+              <ErrorWrapper>
+                <ErrorMessage error={errors.userName} />
+              </ErrorWrapper>
+            )}
           </FullWidthInputWrapper>
 
           <FullWidthInputWrapper>
@@ -339,7 +334,11 @@ const Register = () => {
               type="email"
               error={errors.email}
             />
-            {errors.email && <ErrorWrapper><ErrorMessage error={errors.email} /></ErrorWrapper>}
+            {errors.email && (
+              <ErrorWrapper>
+                <ErrorMessage error={errors.email} />
+              </ErrorWrapper>
+            )}
           </FullWidthInputWrapper>
 
           <InputWrapper>
@@ -350,10 +349,22 @@ const Register = () => {
               placeholder="Password"
               type={showPassword ? "text" : "password"}
               error={errors.password}
-              
             />
-           <EyeIcon onClick={()=>setShowPassword(!showPassword)}>{showPassword ? <VisibilityIcon style={{ fontSize: "18px" }}/> : <VisibilityOffIcon style={{ fontSize: "18px" }}/>}</EyeIcon>
-            {errors.password &&  <ErrorWrapper><ErrorMessage error={errors.password} /></ErrorWrapper>}
+            { formData.password && 
+              <EyeIcon onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? (
+                <VisibilityIcon style={{ fontSize: "18px" }} />
+              ) : (
+                <VisibilityOffIcon style={{ fontSize: "18px" }} />
+              )}
+            </EyeIcon>
+            }
+            
+            {errors.password && (
+              <ErrorWrapper>
+                <ErrorMessage error={errors.password || errors.passwordMatch} />
+              </ErrorWrapper>
+            )}
           </InputWrapper>
 
           <InputWrapper>
@@ -364,11 +375,31 @@ const Register = () => {
               placeholder="Confirm Password"
               type={showConfirmPassword ? "text" : "password"}
               error={errors.confirmPassword}
-              
             />
-            <EyeIcon onClick={()=>setShowConfirmPassword(!showConfirmPassword)}>{showConfirmPassword ? <VisibilityIcon style={{ fontSize: "18px" }} /> : <VisibilityOffIcon style={{ fontSize: "18px" }}/>}</EyeIcon>
-            {errors.confirmPassword && <ErrorWrapper><ErrorMessage error={errors.confirmPassword} /></ErrorWrapper>}
+            {formData.confirmPassword &&
+              <EyeIcon
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            >
+              {showConfirmPassword ? (
+                <VisibilityIcon style={{ fontSize: "18px" }} />
+              ) : (
+                <VisibilityOffIcon style={{ fontSize: "18px" }} />
+              )}
+            </EyeIcon> }
+            
+            {errors.confirmPassword && (
+              <ErrorWrapper>
+                <ErrorMessage error={errors.confirmPassword || errors.passwordMatch} />
+              </ErrorWrapper>
+            )}
           </InputWrapper>
+          
+
+          {errors.passwordMatch && !errors.password && !errors.confirmPassword && (
+          <ErrorWrapper>
+                <ErrorMessage error={errors.passwordMatch} />
+          </ErrorWrapper>
+          )}
 
           <Agreement>
             By creating an account, I consent to the processing of my personal
@@ -376,7 +407,9 @@ const Register = () => {
           </Agreement>
 
           <ButtonWrapper>
-            <Button type="submit" disabled={isFetching}>CREATE</Button>
+            <Button type="submit" disabled={isFetching}>
+              CREATE
+            </Button>
           </ButtonWrapper>
         </Form>
       </Wrapper>

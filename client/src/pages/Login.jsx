@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { register } from "../redux/userRedux";
 import { use } from "react";
 import ErrorMessage from "../ui/error";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { validationField } from "../utils/validationError";
 
 const Container = styled.div`
   width: 100%;
@@ -113,6 +116,15 @@ const Input = styled.input`
     font-size: 12px;
     letter-spacing: 1px;
   }
+`;
+
+const EyeIcon = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
 `;
 
 const Button = styled.button`
@@ -228,34 +240,22 @@ const ErrorWrapper = styled.div`
   margin-top: 5px;
 `;
 
+
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [authError , setAuthError] = useState(null);
   const [validationErrors, setValidationErrors] = useState(null);
+  const [showPassword , setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isFetching, error, currentUser, isAuthenticated } = useSelector((state) => state.user);
+  const { isFetching, error,errorMessage , currentUser, isAuthenticated } = useSelector((state) => state.user);
+
+  console.log(error, errorMessage)
 
 
 
-  const validationField = (name, value) => {
-    const newErrors = {};
-    switch (name) {
-      case 'userName':
-        if (value.length < 4) newErrors.userName = 'Username must be at least 4 characters.';
-        else if (!/^[a-zA-Z0-9_]+$/.test(value)) newErrors.userName = 'Username can only contain letters, numbers, and underscores.';
-        break;
-      case 'password':
-        if (value.length < 8) newErrors.password = 'Password must be at least 8 characters.';
-        else if (!/[A-Z]/.test(value)) newErrors.password = 'Password must contain at least one uppercase letter.';
-        else if (!/[0-9]/.test(value)) newErrors.password = 'Password must contain at least one number.';
-        break;
-      default:
-        break;
-    }
-    return newErrors;
-  };
 
   // console.log(isFetching, error, currentUser, isAuthenticated)
   const handleLogin = async (e) => {
@@ -275,9 +275,8 @@ const Login = () => {
       if (userData) {
         navigate("/");
       }
-    } catch (error) {
-      setAuthError(error.message)
-      console.error("Login failed:", error);
+    } catch (err) {
+      console.error("Login failed:", err);
     }
   };
 
@@ -288,6 +287,18 @@ const Login = () => {
     navigate("/register");
   };
 
+  const handleUserNameChange =  (e) => {
+    const userNameValue  =  e.target.value;
+    setUsername(userNameValue);
+    setValidationErrors((prev) => ({...prev , userName : null}))
+  }
+
+  const handleUserPasswordChange = (e) => {
+    const passwordValue =  e.target.value
+    setPassword(passwordValue)
+    setValidationErrors((prev) => ({...prev , password : null}))
+  }
+
   return (
     <Container>
       <Wrapper>
@@ -296,26 +307,33 @@ const Login = () => {
           <InputWrapper>
             <Input
               placeholder="username"
-              onChange={(e) => {setUsername(e.target.value)
-                setValidationErrors((prev) => ({...prev , userName : null}))
-              }}
+              onChange={handleUserNameChange}
             />
             {validationErrors?.userName && <ErrorWrapper><ErrorMessage error={validationErrors?.userName} /></ErrorWrapper>}
           </InputWrapper>
           <InputWrapper>
             <Input
               placeholder="password"
-              type="password"
-              onChange={(e) => {
-                setValidationErrors((prev) => ({...prev , password : null}))
-              }}
+              type={showPassword ? "text" : "password"}
+              onChange={handleUserPasswordChange}
+
             />
+            {password &&
+              <EyeIcon
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <VisibilityIcon style={{ fontSize: "18px" }} />
+              ) : (
+                <VisibilityOffIcon style={{ fontSize: "18px" }} />
+              )}
+            </EyeIcon> }
           {validationErrors?.password &&  <ErrorWrapper><ErrorMessage error={validationErrors?.password} /></ErrorWrapper>}
 
           </InputWrapper>
           <Button onClick={handleLogin} disabled={isFetching}> {isFetching ? "SIGNING IN..." : "LOGIN"}
           </Button>
-          {authError && <Error>{authError}</Error>}
+          {errorMessage && <Error>{errorMessage}</Error>}
           <Divider />
           <LinksContainer>
             <Link>Forgot your password?</Link>
