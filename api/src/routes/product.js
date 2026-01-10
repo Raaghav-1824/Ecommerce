@@ -58,7 +58,7 @@ productRouter.delete("/:id", async (req, res) => {
 
 //GET PRODUCT
 
-import mongoose from "mongoose"; // Ensure you import mongoose
+import mongoose from "mongoose"; 
 
 productRouter.get("/find/:id", async (req, res) => {
   const productId = req.params.id;

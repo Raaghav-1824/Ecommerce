@@ -3,7 +3,7 @@ import {
   verifyTokenAndAdmin,
   verifyTokenAndAuth,
   verifyToken
-} from "../routes/verifyToken.js";
+} from "./verifyToken.js";
 import Cart from "../models/Cart.js";
 
 

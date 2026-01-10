@@ -2,6 +2,11 @@ import express from "express";
 import User from "../models/User.js";
 import CryptoJS from "crypto-js";
 import jsonwebtoken from "jsonwebtoken";
+import { createOtpAndSend } from "../services/authServices.js";
+// import { forgotPassword } from "../controllers/auth/sendOTP.js";
+import { generateOTP, hashOTP } from "../../utils/generateOTP.js";
+
+
 
 // const jwt = jsonwebtoken();
 
@@ -63,7 +68,6 @@ authRouter.post("/login", async (req, res) => {
     );
     // console.log("BBBBBB",hashedPassword);
     const decryptedPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
-    // console.log("CCCCCCc",decryptedPassword);
 
     if (req.body.password !== decryptedPassword) {
       return res.status(401).json({
@@ -98,5 +102,25 @@ authRouter.post("/login", async (req, res) => {
     });
   }
 });
+
+
+
+// forgot-password 
+authRouter.post("/forgot-password" , async(req, res)=>{
+  console.log("called")
+  try {
+    await createOtpAndSend(req,res);
+    //  res.status(200).json({message : "OTP sent to email"});
+    
+  } catch (error) {
+     res.status(400).json({message : error.message})
+  }
+});
+
+
+
+
+
+
 
 export default authRouter;
